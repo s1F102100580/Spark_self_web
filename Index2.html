@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spark_self</title>
+  <link rel="stylesheet" href="Spark.css">
+  <link rel="icon" href="img/SSico.png" type="image/png" sizes="32x32">
+</head>
+
+
+
+<body>
+	
+	<!-- shooting star layer（JSで中身を作る） -->
+	 <!--
+	<div class="shooting-layer" aria-hidden="true"></div>
+-->
+
+	<!-- floating star (on load) 
+	<div class="float-star-layer" aria-hidden="true">
+		<span class="float-star" aria-hidden="true"></span>
+	</div>
+-->
+	
+
+
+
+	<div class="noise" aria-hidden="true"></div>
+	<!-- Floating SNS（固定） -->
+	<div class="sns-float" aria-label="SNS">
+
+	<a class="sns-float-btn" href="https://www.instagram.com/spark_self26/" target="_blank" rel="noopener" aria-label="Instagramへ">
+		<!-- Instagram icon -->
+		 <img class="sns-float-icon" src="img/Instagram.png" alt="" aria-hidden="true">	
+	</a>
+
+	<a class="sns-float-btn" href="https://x.com/spark_self26" target="_blank" rel="noopener" aria-label="Xへ">
+		<!-- X icon -->
+		<img class="sns-float-icon" src="img/X .png" alt="" aria-hidden="true">
+  	</a>
+
+	<a class="sns-float-btn" href="https://www.tiktok.com/@spark_self?lang=ja-JP" target="_blank" rel="noopener" aria-label="TikTokへ">
+		<!-- TikTok icon -->
+		 <img class="sns-float-icon" src="img/TikTok.png" alt="" aria-hidden="true">
+	</a>
+	</div>
+
+
+	<section class="hero-top" id="top" aria-label="Hero">
+    <div class="hero-inner">
+		<img class="hero-logo" src="img/SNS_real.png" alt="Spark_Self" />
+    	<img class="hero-logo" src="img/SSbar.png" alt="Spark_Self" />
+		<img class="hero-logo2" src="img/avex.png" alt="Spark_Self" />
+    </div>
+	</section>
+
+	<section class="section" id="stage" aria-label="stage">
+	<div class="nitiji">
+		<p>
+		2026.<span class="date-blue">2.28</span>sat <br>
+		代官山UNIT<br>
+		<span class="nitiji-sub">OPEN 17:00 / START 18:00</span>
+		</p>
+
+	</div>
+	</section>
+
+
+
+
+  <!-- Sticky Header -->
+  <header class="site-header" id="header">
+	<div class="header-inner">
+		<a class="brand-mini" href="#top" aria-label="トップへ">
+			<img class="brand-logo" src="img/SSico.png" alt="Spark_Self" />
+			<p>SPARK_SELF</p>
+		</a>
+
+		
+
+
+      <nav class="nav" aria-label="グローバルメニュー">
+		<a href="#stage">DATE・VENUE</a>
+        <a href="#artists">ARTISTS</a>
+        <a href="#ticket">TICKETS</a>
+		<a href="#gallery">GALLERY</a>
+		<a href="#about">ABOUT</a>
+		<a href="#location">LOCATION</a>
+      </nav>
+
+      <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- 背景を暗くする -->
+    <div class="overlay" aria-hidden="true"></div>
+
+    <!-- Mobile Drawer -->
+    <div class="drawer" aria-hidden="true">
+      <nav class="drawer-nav" aria-label="モバイルメニュー">
+		<a href="#stage">DATE・VENUE</a>
+        <a href="#artists">ARTISTS</a>
+        <a href="#ticket">TICKETS</a>
+		<a href="#gallery">GALLERY</a>
+		<a href="#about">ABOUT</a>
+		<a href="#location">LOCATION</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 仮の本文（確認用） -->
+	<main class="main" id="main">
+	<div class="main-inner reveal">
+		<section id="summary" aria-label="概要">
+
+		<h2 class="section-title">「全方向」、若者。</h2>
+
+		<div class="card--summarybg summary-body">
+			<p class="lead summary-text" id="summaryText">
+			SNSでのヒットが音楽シーンを動かす今、<br>その瞬間を肌で感じてきた若者たちが作り出すライブ
+			<br>「SPARK _SELF」の開催が決定しました。<br><br>
+
+			SNS発のバイラルヒットによって注目を集めるアーティストは、どうしてもヒット曲のみのイメージが先行してしまう傾向があります。<br>
+			しかし、その裏側には数多くの楽曲や、アーティスト自身の魅力・人間性が確かに存在しています。<br><br>
+
+			「SPARK _SELF」では、バイラルヒット曲だけでは見られないアーティストの「リアル」を多角的に伝えることをテーマにしています。<br>
+			当日はアーティストのパフォーマンスだけではなく、<br>会場の特性を十二分に活用した場内装飾など、<br>
+			様々な仕掛けが感情に訴えかけます。<br><br>
+
+			さらに、出演者・来場者・運営スタッフ、そのすべてが「若者」で構成されているこのライブでは、<br>
+			同世代ならではの感性と熱量が交差し合い、強いシナジーを生み出します。<br>
+			SNS世代を牽引するアーティストの熱いパフォーマンスと、<br>
+			会場に足を踏み入れた瞬間から引き込まれるような圧倒的な没入体験を、ぜひお見逃しなく。
+			</p>
+
+			<button class="summary-cta" type="button" id="summaryToggle"
+			aria-expanded="false" aria-controls="summaryText">
+			▼What is SPARK_SELF?
+			</button>
+		</div>
+
+	</div>
+
+	<div class="main-inner reveal">
+		<section class="section" id="artists">
+		<h2 class="section-title">Artists</h2>
+
+			<div class="artists-list">
+
+				<article class="artist-row"
+				data-name="らそんぶる"
+				data-desc="SNSを起点に広がる共感とリアリティを、等身大の言葉とメロディで描くアーティスト。"
+				data-img="img/raso.jfif">
+
+				<!-- 左：写真 -->
+				<div class="artist-photo">
+					<img src="img/raso.jfif" alt="らそんぶる">
+				</div>
+
+				<!-- 右：説明 -->
+				<div class="artist-text">
+					<img class="artist-logo" src="img/raso_rogo.png" alt="らそんぶる ロゴ">
+					<p class="artist-desc">
+					“あなたの心の太陽になるバンド”<br>
+					2024年1月に結成。<br>
+					バンドの運営は全て自主で、<br>
+					現在発表されている曲の作詞作曲は<br>
+					全てギターボーカルそらによるもの。<br>
+					メジャー、インディー、マネージメントなど問わず<br>
+					ライブには常に関係者が押し寄せるほど話題に。<br>
+					一緒に歌えるくらいポップなメロディーに<br>
+					20歳らしい等身大の歌詞が<br>
+					同世代、年下世代（中高生）にも<br>
+					響き同性からも支持を得ている。<br>
+					</p>
+				</div>
+
+				</article>
+
+				<article class="artist-row"
+				data-name="Gum-9"
+				data-desc="重厚なバンドサウンドとエモーショナルなボーカルが交差する4人組ロックバンド。"
+				data-img="img/gum.jfif">
+
+				<div class="artist-photo">
+					<img src="img/gum.jfif" alt="Gum-9">
+				</div>
+
+				<div class="artist-text">
+					<img class="artist-logo" src="img/Gum-9_rogo.png" alt="Gum-9 ロゴ">
+					<p class="artist-desc">
+					- 情けない僕と君が、誰かの大切で在れますように -<br>
+					九段中等教育学校の同級生4人で結成。<br>
+					4人組ロックバンド・Gum-9（ガムナイン）。 <br>
+					高校時代に音楽コンテストへの出場をきっかけに<br>
+					バンド活動をスタートさせ、現在は下北沢を拠点に活動。<br>
+					人が持つ情けなさや弱さ・カッコ悪さを、<br>
+					あるがままの形・経験で歌い、 時にそれを隠すように<br>
+					辛さを忘れられるような明るさを持つ音楽を奏でる。<br>
+					ドラマのような人生も、<br>
+					ドラマにならないような日常の機微も描くバンド。<br>
+					</p>
+				</div>
+				</article>
+
+				<article class="artist-row"
+				data-name="Fish and Lips"
+				data-desc="ポップネスとロックの衝動を併せ持つ、若者世代を象徴するバンド。"
+				data-img="img/fishjpeg.jpeg">
+
+				<div class="artist-photo">
+					<img src="img/fishjpeg.jpeg" alt="Fish and Lips">
+				</div>
+
+				<div class="artist-text">
+					<img class="artist-2logo" src="img/fish_logo2.png" alt="Fish and Lips ロゴ">
+					<p class="artist-desc">
+					2022年1月結成、埼玉県鳩ヶ谷発スリーピースバンド、<br>
+					Fish and Lips ( 通称：フィシュリ）。<br>
+					思わず口ずさんでしまいたくなるキャッチーな歌と、<br>
+					無骨なギターロックサウンドが特徴。<br>
+					「JAPAN JAM2024」に大抜擢され、<br>
+					最年少バンドとしてのフレッシュなパフォーマンスが<br>
+					大きな話題となる。<br>
+					邦ロックシーン新世代のトップを突っ走り<br>
+					急成長を遂げているFish and Lips から、<br>
+					今後も目が離せない。<br>
+					</p>
+				</div>
+				</article>
+
+			</div>
+		</section>
+	</div>
+
+	<div class="main-inner reveal">
+	<section class="section" id="ticket" aria-label="チケット">
+		<h2 class="section-title">tickets</h2>
+
+		<!-- 価格 -->
+		<div class="ticket-prices">
+		<p class="price-value">一般¥4,900 / 学割¥3,900 / 当日¥5,400</p>
+		</div>
+
+		<p class="ticket-note">※ドリンク代(600円・現金のみ)必須<br>※未就学児入場不可</p>
+
+		<!-- 先行販売 -->
+		<div class="ticket-sale">
+		<p class="sale-kicker">【オフィシャル先着先行】</p>
+		<p>※先着順のため予定枚数に達し次第終了となります。</p>
+		<p class="sale-date">2026年1月21日(水)12:00〜2026年2月12日(木)23:59</p>
+
+		<a class="sale-link" href="https://eplus.jp/spark_self/" target="_blank" rel="noopener">
+			<img class="sale-link-img" src="img/epul.png" alt="e-plusで購入">
+		</a>
+		<a class="sale-link" href="https://l-tike.com/concert/mevent/?mid=774748" target="_blank" rel="noopener">
+			<img class="sale-link-img" src="img/lo_tike.webp" alt="ローチケで購入">
+		</a>
+		<a class="sale-link" href="https://w.pia.jp/t/spark-self/" target="_blank" rel="noopener">
+			<img class="sale-link-img" src="img/tikepia.png" alt="チケットぴあで購入">
+		</a>
+		</div>
+	</section>
+	</div>
+
+	<div class="main-inner reveal">
+	<section class="section" id="news" aria-label="news">
+		<h2 class="section-title">news</h2>
+
+		<ul class="news-list" aria-label="news list">
+		<!-- 1 -->
+		<li class="news-item">
+			<h3 class="news-title">SPICE（スパイス）｜エンタメ特化型情報メディア</h3>
+			<p class="news-excerpt">
+				<a href="https://spice.eplus.jp/articles/343252">
+					SNS世代のリアルを描くライブイベント『SPARK _SELF』開催決定　Gum-9、Fish and Lips、らそんぶるが出演
+				</a>
+			</p>
+
+		</li>
+
+		<!-- 2 -->
+		<li class="news-item">
+			<h3 class="news-title">Avex EB</h3>
+			<p class="news-excerpt">
+				<a  href="https://eb.avex.jp/news/4470/" target="_blank" rel="noopener">
+					【ライブ制作志望者必見！】avex EB主催「SPARK _SELF」開催決定！
+				</a>
+			</p>
+			<a  href="https://eb.avex.jp/news/4470/" target="_blank" rel="noopener">
+			</a>
+		</li>
+
+		<!-- 3 -->
+		<li class="news-item">
+			<h3 class="news-title">PR TIMES</h3>
+			<p class="news-excerpt">
+				<a href="https://prtimes.jp/main/html/rd/p/000000316.000025862.html" target="_blank" rel="noopener">
+					SNS世代のリアルがここにある。「SPARK _SELF」開催決定！
+				</a>
+			</p>
+		</li>
+		</ul>
+	</section>
+	</div>
+
+
+
+	<div class="main-inner reveal">
+	<section class="section" id="gallery" aria-label="gallery">
+		<h2 class="section-title">gallery</h2>
+
+		<div class="coming-grid">
+			<div class="coming-box" aria-label="Coming soon">
+				<p class="coming-text">COMING SOON...</p>
+			</div>
+
+			<div class="coming-box" aria-label="Coming soon">
+				<p class="coming-text">COMING SOON...</p>
+			</div>
+		</div>
+
+	</section>
+	</div>
+
+
+
+	<div class="main-inner reveal">
+
+		<!-- ABOUT -->
+		<section class="section" id="about" aria-label="ABOUT">
+		<h2 class="section-title">ABOUT</h2>
+
+		<div class="card">
+			<p class="lead">
+			<br>■AEGX 公演ページ
+			<br>https://aegx.jp/
+			<br>■お問い合わせ
+			<br>@-Information　https://supportform.jp/a-information
+			<br>(営業時間：平日10:00～17:00)
+
+			<br>主催：エイベックス・エンタテインメント
+			<br>制作 / 運営：エイベックス・ライヴ・クリエイティヴ / 
+			<br>エイベックス・エンタテインメントビジネスマスター
+			<br>
+			<br>■エイベックス・エンタテインメントビジネスマスターについて
+			<br>音楽やライヴ、映画、アニメといったエンタメ業界で活躍するために必要なビジネススキルを1年間の講義と実践的なインターン活動を通じて学べる
+			<br>エンタテインメントビジネススクールです。
+			<br>大学でも専門学校でもない、「好きを仕事にしたい」を叶える場として2001年に開講し、これまでに2,500名以上の卒業生を輩出。 
+			<br>業界未経験だった受講生たちが、卒業後にエンタテインメント業界の第一線で活躍しています。
+			<br>エンタメ業界の最前線で活躍するプロフェショナルによる実践的な講義と、
+			<br>インターンシップをはじめとした実践を伴う活動の経験が、受講生たちを大きな成長に導きます。
+
+			</p>
+		</div>
+		</section>
+
+
+		<div class="main-inner reveal">
+		<section class="section" id="location" aria-label="ロケーション">
+			<h2 class="section-title">location</h2>
+
+			<div class="card">
+			<p class="lead">
+				代官山UNIT
+			</p>
+
+			<div class="map-embed" aria-label="Google Map">
+				<!-- Google Mapsの「共有」→「地図を埋め込む」→iframeを貼る -->
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3242.2129335093823!2d139.69753499678953!3d35.6471251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188b45e6efe5d3%3A0x91ab46f48879a496!2z5Luj5a6Y5bGxVU5JVA!5e0!3m2!1sja!2sjp!4v1767619532320!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+			</div>
+
+			<div class="loc-meta">
+				<a class="loc-link" href="https://maps.google.com/?q=代官山UNIT" target="_blank" rel="noopener">
+				Google Mapsで開く
+				</a>
+			</div>
+			</div>
+		</section>
+	</div>
+
+	</div>
+
+
+	
+
+
+	</main>
+
+	<fotter>
+		<p>＠SPARK_SELF実行委員会</p>
+	</fotter>
+
+
+	<script>
+	document.documentElement.classList.add("js");
+
+	document.addEventListener("click", (e) => {
+	const item = e.target.closest(".artist-item");
+	if (!item) return;
+
+	// PCでは何もしない
+	if (window.matchMedia("(min-width: 769px)").matches) return;
+
+	// SPのみモーダル
+	openArtistModal({
+		name: item.dataset.name,
+		desc: item.dataset.desc,
+		img:  item.dataset.img
+	});
+	});
+
+
+	document.addEventListener("DOMContentLoaded", () => {
+
+
+
+		try{
+			const wrap = document.querySelector("#summary .summary-body");
+			const btn  = document.getElementById("summaryToggle");
+			const text = document.getElementById("summaryText");
+
+			if (wrap && btn && text){
+				btn.addEventListener("click", () => {
+				const open = wrap.classList.toggle("is-open");
+				btn.setAttribute("aria-expanded", String(open));
+				btn.textContent = open ? "閉じる" : "▼What is SPARK_SELF?";
+				});
+			}
+			}catch(err){
+			console.error("[summary toggle error]", err);
+			}
+
+	/* =========================
+		1) section-title split（title-wrapで包む）
+	========================= */
+	try{
+		document.querySelectorAll(".section-title").forEach((el) => {
+		if (el.dataset.splitDone === "1") return;
+
+		const text = (el.textContent || "").trim();
+		el.textContent = "";
+
+		const wrap = document.createElement("span");
+		wrap.className = "title-wrap";
+		el.appendChild(wrap);
+
+		[...text].forEach((ch, i) => {
+			const span = document.createElement("span");
+			span.className = "char";
+			span.style.setProperty("--i", i);
+			span.textContent = (ch === " ") ? "\u00A0" : ch;
+			wrap.appendChild(span);
+		});
+
+		el.dataset.splitDone = "1";
+		});
+	}catch(err){
+		console.error("[split section-title error]", err);
+	}
+
+	/* =========================
+		2) reveal + title-wrap slideIn（IntersectionObserverは1個）
+	========================= */
+	try{
+		const revealTargets = document.querySelectorAll(".main-inner.reveal");
+
+		if (revealTargets.length) {
+		const revealIO = new IntersectionObserver((entries) => {
+			entries.forEach((ent) => {
+			if (!ent.isIntersecting) return;
+
+			// main-inner全体のreveal
+			ent.target.classList.add("is-in");
+
+			// タイトル塊：スライドイン開始
+			ent.target
+				.querySelectorAll(".section-title .title-wrap")
+				.forEach((w) => w.classList.add("is-animated"));
+
+			revealIO.unobserve(ent.target);
+			});
+		}, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
+
+		revealTargets.forEach((el) => revealIO.observe(el));
+		}
+	}catch(err){
+		console.error("[reveal/title animation error]", err);
+	}
+
+	/* =========================
+		3) Header / Drawer
+	========================= */
+	try{
+		const header = document.getElementById("header");
+		const toggle = header?.querySelector(".nav-toggle");
+		const drawer = header?.querySelector(".drawer");
+		const overlay = header?.querySelector(".overlay");
+
+		function setOpen(isOpen) {
+		if (!header || !toggle || !drawer || !overlay) return;
+		header.classList.toggle("is-open", isOpen);
+		toggle.setAttribute("aria-expanded", String(isOpen));
+		drawer.setAttribute("aria-hidden", String(!isOpen));
+		overlay.setAttribute("aria-hidden", String(!isOpen));
+		}
+
+		toggle?.addEventListener("click", () => {
+		setOpen(!header.classList.contains("is-open"));
+		});
+
+		overlay?.addEventListener("click", () => setOpen(false));
+		header?.querySelectorAll(".drawer-nav a").forEach((a) => {
+		a.addEventListener("click", () => setOpen(false));
+		});
+
+		window.addEventListener("resize", () => {
+		if (window.innerWidth > 980) setOpen(false);
+		});
+	}catch(err){
+		console.error("[header/drawer error]", err);
+	}
+
+	/* =========================
+		4) Artist Modal
+	========================= */
+	try{
+		const artistModal = document.getElementById("artistModal");
+		const modalTitle = document.getElementById("modalTitle");
+		const modalDesc  = document.getElementById("modalDesc");
+		const modalImg   = document.getElementById("modalImg");
+		let lastFocus = null;
+
+		function openArtistModal({ name, desc, img }) {
+		if (!artistModal) return;
+		lastFocus = document.activeElement;
+
+		if (modalTitle) modalTitle.textContent = name || "";
+		if (modalDesc)  modalDesc.textContent  = desc || "";
+		if (modalImg) {
+			modalImg.src = img || "";
+			modalImg.alt = name || "";
+		}
+
+		artistModal.classList.add("is-open");
+		artistModal.setAttribute("aria-hidden", "false");
+		document.documentElement.style.overflow = "hidden";
+		artistModal.querySelector(".modal-close")?.focus();
+		}
+
+		function closeArtistModal() {
+		if (!artistModal) return;
+		artistModal.classList.remove("is-open");
+		artistModal.setAttribute("aria-hidden", "true");
+		document.documentElement.style.overflow = "";
+		lastFocus?.focus?.();
+		}
+
+		document.addEventListener("click", (e) => {
+		const nameBtn = e.target.closest(".artist-name-btn");
+		if (nameBtn) {
+			const item = nameBtn.closest(".artist-item");
+			openArtistModal({
+			name: item?.dataset.name,
+			desc: item?.dataset.desc,
+			img:  item?.dataset.img
+			});
+			return;
+		}
+
+		const imgEl = e.target.closest(".artist-img");
+		if (imgEl) {
+			const item = imgEl.closest(".artist-item");
+			if (item) {
+			openArtistModal({
+				name: item.dataset.name,
+				desc: item.dataset.desc,
+				img:  item.dataset.img
+			});
+			return;
+			}
+		}
+
+		if (e.target.closest("[data-close='true']")) closeArtistModal();
+		});
+
+		document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && artistModal?.classList.contains("is-open")) {
+			closeArtistModal();
+		}
+		});
+	}catch(err){
+		console.error("[artist modal error]", err);
+	}
+
+	/* =========================
+		5) EBメッセージ：モーダル
+	========================= */
+	try{
+		const msgModal  = document.getElementById("msgModal");
+		const msgName   = document.getElementById("msgName");
+		const msgText   = document.getElementById("msgText");
+		const msgAvatar = document.getElementById("msgAvatar");
+
+		function openMsg({ name, img, msg }) {
+		if (!msgModal) return;
+		if (msgName) msgName.textContent = name || "";
+		if (msgText) msgText.textContent = msg || "";
+		if (msgAvatar) {
+			msgAvatar.src = img || "";
+			msgAvatar.alt = name || "";
+		}
+		msgModal.classList.add("is-open");
+		msgModal.setAttribute("aria-hidden", "false");
+		document.body.style.overflow = "hidden";
+		}
+
+		function closeMsg() {
+		if (!msgModal) return;
+		msgModal.classList.remove("is-open");
+		msgModal.setAttribute("aria-hidden", "true");
+		document.body.style.overflow = "";
+		}
+
+		document.querySelectorAll(".person").forEach((btn) => {
+		btn.addEventListener("click", () => {
+			openMsg({
+			name: btn.dataset.name,
+			img:  btn.dataset.img,
+			msg:  btn.dataset.msg
+			});
+		});
+		});
+
+		msgModal?.querySelectorAll("[data-close]").forEach((el) => {
+		el.addEventListener("click", closeMsg);
+		});
+
+		document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape" && msgModal?.classList.contains("is-open")) {
+			closeMsg();
+		}
+		});
+	}catch(err){
+		console.error("[msg modal error]", err);
+	}
+
+	/* =========================
+		6) shooting / floating star 後処理
+	========================= */
+	});
+	</script>
+
+	<script>
+document.documentElement.classList.add("js");
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ・・・（あなたの既存処理 1)〜5) はそのまま）・・・ */
+
+  /* =========================
+     6) shooting star を複製して全体に出す
+  ========================= */
+  try{
+    const layer = document.querySelector(".shooting-layer");
+    if (!layer) return;
+
+    const COUNT = 14;              // ここを増やすほど“画面全体感”が出る
+    const TOP_MIN = 5;             // 上から何%〜
+    const TOP_MAX = 85;            // 〜何%まで（下すぎると見えづらいなら下げる）
+
+    for(let i=0; i<COUNT; i++){
+      const s = document.createElement("span");
+      s.className = "shooting-star";
+
+      // 位置をばら撒く（右から出るので x は 110% 固定でOK）
+      const y = TOP_MIN + Math.random() * (TOP_MAX - TOP_MIN);
+
+      // ばらつき（遅延/速度/角度）
+      const delay = 0.1 + Math.random() * 1.2;     // 0.1〜1.3s
+      const dur   = 0.9 + Math.random() * 0.7;     // 0.9〜1.6s
+      const rot   = (-18 + Math.random() * 12);    // -18〜-6deg（/ の傾き調整）
+
+      s.style.setProperty("--y", `${y}%`);
+      s.style.setProperty("--x", `110%`);
+      s.style.setProperty("--delay", `${delay}s`);
+      s.style.setProperty("--dur", `${dur}s`);
+      s.style.setProperty("--rot", `${rot}deg`);
+
+      layer.appendChild(s);
+
+      // 1個ずつ終わったら消す（“残したい”ならこの remove を消す）
+      s.addEventListener("animationend", () => s.remove());
+    }
+
+    // 全部消えたらレイヤーも消す（残したいなら消す）
+    setTimeout(() => {
+      if (layer.childElementCount === 0) layer.remove();
+    }, 4000);
+
+  }catch(err){
+    console.error("[shooting star multi error]", err);
+  }
+
+  /* floating star の後処理はそのままでOK */
+});
+
+document.addEventListener("click",(e)=>{
+  const row = e.target.closest(".artist-row");
+  if(!row) return;
+
+  if(window.matchMedia("(min-width:769px)").matches) return;
+
+  openArtistModal({
+    name: row.dataset.name,
+    desc: row.dataset.desc,
+    img:  row.dataset.img
+  });
+});
+
+
+
+</script>
+
+
+
+
+
+	<div class="modal" id="artistModal" aria-hidden="true">
+		<div class="modal-overlay" data-close="true"></div>
+
+		<div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+			<button class="modal-close" type="button" aria-label="閉じる" data-close="true">×</button>
+
+			<div class="modal-body">
+			<h3 class="modal-title" id="modalTitle"></h3>
+			<p class="modal-desc" id="modalDesc"></p>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
