@@ -84,6 +84,19 @@ body{
   font-weight: 1200;     /* ←全体の太さ */
 }
 
+@media (max-width: 768px){
+  body{
+    background: url("img/back_media.jpg") center/cover no-repeat fixed;
+  }
+}
+
+/* さらに小さい端末用（必要なら） */
+@media (max-width: 480px){
+  body{
+    background: url("img/back_media.jpg") center/cover no-repeat fixed;
+  }
+}
+
 .section-title{
   font-size: clamp(32px, 4.8vw, 56px); /* スマホ32〜PC56くらい */
   font-weight: 900;
