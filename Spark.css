@@ -36,7 +36,8 @@ img, svg{
 /* スマホだけ上書き */
 @media (max-width: 600px){
   .nitiji{
-    margin-top: 100px; /* 好きに調整：16〜32くらいが無難 */
+    margin-top: 150px; 
+    font-size: large;/* 好きに調整：16〜32くらいが無難 */
   }
 }
 
@@ -259,6 +260,7 @@ a:hover{ text-decoration:underline; }
 .hero-inner{
   width: min(var(--max), calc(100% - (var(--padX) * 2)));
   margin: 0 auto;
+  margin-top: 40px;
   text-align:center;
 }
 .hero-logo{
@@ -271,6 +273,9 @@ a:hover{ text-decoration:underline; }
   .hero-logo{
     width: min(820px, 90%);
     margin: 0 auto -10px;
+  }
+  .hero-inner{
+    margin-top: 100px;
   }
 }
 
