@@ -9,6 +9,15 @@
   <meta name='keywords' content='SPARK_SELF,スパークセルフ,EB,avexEB,' />
 </head>
 
+<script>
+  // 右クリックメニュー無効（全体）
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  // 画像のドラッグも無効（PC）
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG') e.preventDefault();
+  });
+</script>
 
 
 <body>
@@ -153,6 +162,7 @@
 				<!-- 左：写真 -->
 				<div class="artist-photo">
 					<img src="img/raso.jfif" alt="らそんぶる">
+					<button class="artist-name-sp" type="button">らそんぶる</button>
 				</div>
 
 				<!-- 右：説明 -->
@@ -719,6 +729,90 @@ document.addEventListener("click",(e)=>{
 
 
 </script>
+
+<script>
+document.documentElement.classList.add("js");
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== Artist Modal =====
+  const artistModal = document.getElementById("artistModal");
+  const modalTitle  = document.getElementById("modalTitle");
+  const modalDesc   = document.getElementById("modalDesc");
+  const modalImg    = document.getElementById("modalImg");
+  let lastFocus = null;
+
+  function openArtistModalFromRow(row){
+    if (!artistModal || !row) return;
+
+    // PCでは開かない
+    if (window.matchMedia("(min-width: 769px)").matches) return;
+
+    lastFocus = document.activeElement;
+
+    const name =
+      row.dataset.name ||
+      row.querySelector(".artist-name-sp")?.textContent ||
+      row.querySelector(".artist-logo")?.alt ||
+      "";
+
+    // ★スマホで非表示の .artist-text から本文を拾う（最強）
+    const fullDesc =
+      row.querySelector(".artist-desc")?.innerText?.trim() ||
+      row.dataset.desc ||
+      "";
+
+    const imgSrc =
+      row.dataset.img ||
+      row.querySelector(".artist-photo img")?.getAttribute("src") ||
+      "";
+
+    if (modalTitle) modalTitle.textContent = name;
+    if (modalDesc)  modalDesc.textContent  = fullDesc;
+
+    if (modalImg){
+      modalImg.src = imgSrc;
+      modalImg.alt = name;
+    }
+
+    artistModal.classList.add("is-open");
+    artistModal.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+    artistModal.querySelector(".modal-close")?.focus();
+  }
+
+  function closeArtistModal(){
+    if (!artistModal) return;
+    artistModal.classList.remove("is-open");
+    artistModal.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    lastFocus?.focus?.();
+  }
+
+  // クリック（委譲）：写真 or 名前 をタップしたら開く
+  document.addEventListener("click", (e) => {
+    const row = e.target.closest(".artist-row");
+    if (!row) return;
+
+    const isPhoto = e.target.closest(".artist-photo img");
+    const isName  = e.target.closest(".artist-name-sp");
+
+    if (isPhoto || isName){
+      openArtistModalFromRow(row);
+      return;
+    }
+
+    // close
+    if (e.target.closest("[data-close='true']")) closeArtistModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && artistModal?.classList.contains("is-open")) {
+      closeArtistModal();
+    }
+  });
+});
+</script>
+
 
 
 
