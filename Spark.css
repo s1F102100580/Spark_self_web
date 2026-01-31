@@ -658,6 +658,13 @@ a:hover{ text-decoration:underline; }
   line-height: 1.9;
 }
 
+@media (max-width: 720px){
+  .lead{
+    font-size: 12px;
+  }
+}
+
+
 /* DATE/OPEN/VENUE */
 .info{
   margin: 0;
@@ -1678,7 +1685,40 @@ a:hover{ text-decoration:underline; }
 }
 
 
+.coming-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.coming-box{
+  position: relative;
+  aspect-ratio: 16 / 9;     /* ←ここ！16:9に統一 */
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(10,10,12,.55);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+/* 画像を入れても箱にピッタリ（トリミング） */
+.coming-box img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* テキストは画像の上に */
 .coming-text{
+  position: relative;
+  z-index: 1;
   margin: 0;
   font-weight: 950;
   letter-spacing: .18em;
@@ -1687,29 +1727,70 @@ a:hover{ text-decoration:underline; }
   font-size: clamp(14px, 3.2vw, 18px);
 }
 
-.coming-box{
-  min-width: 0;
-  height: 300px;              /* 高さを決める：好みで 140〜240px */
-  display: grid;
-  place-items: center;        /* ← 縦横ど真ん中 */
-  padding: 0;                 /* 真ん中寄せ優先なら0推奨 */
+@media (max-width: 900px){
+  .coming-grid{
+    grid-template-columns: 1fr; /* スマホは縦1列 */
+    /* width:200px; は入れない */
+  }
+}
+
+/* ===== Gallery Lightbox ===== */
+.gmodal{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+}
+
+.gmodal.is-open{ display: grid; place-items: center; }
+
+.gmodal-overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(6px);
+}
+
+.gmodal-panel{
+  position: relative;
+  width: min(92vw, 980px);
+  max-height: 86vh;
+  z-index: 1;
   border-radius: 16px;
+  overflow: hidden;
   border: 1px solid rgba(255,255,255,.18);
   background: rgba(10,10,12,.55);
-  backdrop-filter: blur(10px);
-  text-align: center;
-  overflow: hidden;
-  
 }
 
+.gmodal-img{
+  display: block;
+  width: 100%;
+  height: 86vh;
+  max-height: 86vh;
+  object-fit: contain; /* 切らずに収める */
+}
 
+.gmodal-close{
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
 
+/* モバイルでタップしやすく */
 @media (max-width: 900px){
-  .coming-grid{ grid-template-columns: 1fr;
-  width: 200px;
-  }
-  
+  .gmodal-panel{ width: 94vw; }
+  .gmodal-close{ width: 46px; height: 46px; font-size: 28px; }
 }
+
 
 .coming-grid{
   display: grid;
@@ -1718,6 +1799,14 @@ a:hover{ text-decoration:underline; }
   width: 100%;
 }
 
+/* news内のリンクに🔗を付ける */
+#news .news-excerpt a::before{
+  content: " 🔗";
+  display: inline-block;
+  margin-left: .25em;
+  opacity: .85;
+  transform: translateY(-1px);
+}
 
 
 .news-grid{
