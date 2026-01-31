@@ -29,7 +29,7 @@ img, svg{
 /* ===== nitiji：スマホ（デフォルト） ===== */
 /* ===== nitiji：相対値（スマホ〜PCまで滑らか） ===== */
 .nitiji{
-  margin-top: 100px;
+  margin-top: 250px;
   text-align: center;
 }
 
@@ -1800,3 +1800,4 @@ a:hover{ text-decoration:underline; }
   letter-spacing: .18em;
   text-transform: uppercase; /* いらなければ消してOK */
 }
+
