@@ -265,7 +265,7 @@ a:hover{ text-decoration:underline; }
 }
 @media (max-width: 820px){
   .hero-inner{
-    margin-top: 600px;
+    margin-top: 800px;
 }
 }
 
@@ -1807,4 +1807,5 @@ a:hover{ text-decoration:underline; }
   letter-spacing: .18em;
   text-transform: uppercase; /* いらなければ消してOK */
 }
+
 
