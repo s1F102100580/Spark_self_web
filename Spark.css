@@ -115,7 +115,7 @@ body{
 }
 
 .section-title{
-  font-size: clamp(32px, 4.8vw, 56px); /* スマホ32〜PC56くらい */
+  font-size: clamp(40px, 4.8vw, 56px); /* スマホ32〜PC56くらい */
   font-weight: 900;
   letter-spacing: .14em;
   line-height: 1.1;
@@ -265,7 +265,7 @@ a:hover{ text-decoration:underline; }
 }
 @media (max-width: 820px){
   .hero-inner{
-    margin-top: 800px;
+    margin-top: 600px;
 }
 }
 
@@ -737,7 +737,11 @@ a:hover{ text-decoration:underline; }
   transform: translateY(-6px);
   transition: max-height .45s ease, opacity .35s ease, transform .35s ease;
 }
-
+@media (max-width: 600px){
+  .summary-text{
+    font-size: 8px;
+  }
+}
 /* 開いた状態 */
 .summary-body.is-open .summary-text{
   max-height: 2000px; /* 本文が長いので大きめに */
@@ -1807,5 +1811,3 @@ a:hover{ text-decoration:underline; }
   letter-spacing: .18em;
   text-transform: uppercase; /* いらなければ消してOK */
 }
-
-
