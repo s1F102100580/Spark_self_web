@@ -17,6 +17,16 @@
   });
 </script>
 
+<!-- Gallery Lightbox Modal -->
+<div class="gmodal" id="galleryModal" aria-hidden="true">
+  <div class="gmodal-overlay" data-close="true"></div>
+
+  <div class="gmodal-panel" role="dialog" aria-modal="true" aria-label="画像プレビュー">
+    <button class="gmodal-close" type="button" aria-label="閉じる" data-close="true">×</button>
+    <img class="gmodal-img" id="galleryModalImg" alt="">
+  </div>
+</div>
+
 
 <body>
 	
@@ -58,16 +68,18 @@
     </div>
 	</section>
 
-	<section class="section" id="stage" aria-label="stage">
-	<div class="nitiji">
-		<p>
-		2026.<span class="date-blue">2.28</span>sat <br>
-		代官山UNIT<br>
-		<span class="nitiji-sub">OPEN 17:00 / START 18:00</span>
-		</p>
-
+	<div class="main-inner reveal">
+		<section class="section reveal" id="stage" aria-label="stage">
+			<div class="nitiji">
+			<p>
+				2026.<span class="date-blue">2.28</span>sat <br>
+				代官山UNIT<br>
+				<span class="nitiji-sub">OPEN 17:00 / START 18:00</span>
+			</p>
+			</div>
+		</section>
 	</div>
-	</section>
+
 
 
 
@@ -140,7 +152,7 @@
 
 			<button class="summary-cta" type="button" id="summaryToggle"
 			aria-expanded="false" aria-controls="summaryText">
-			▼What is SPARK_SELF?
+			▼What is SPARK _SELF?
 			</button>
 		</div>
 
@@ -319,7 +331,7 @@
 
 		<div class="coming-grid">
 			<div class="coming-box" aria-label="Coming soon">
-				<p class="coming-text">COMING SOON...</p>
+				<img src="img/g1.jpg" class="coming-text">
 			</div>
 
 			<div class="coming-box" aria-label="Coming soon">
@@ -341,7 +353,7 @@
 		<div class="card">
 			<p class="lead">
 			<br>■AEGX 公演ページ
-			<br>https://aegx.jp/
+			<br><a  href="https://aegx.jp/schedule/02/2026/2290/" target="_blank" rel="noopener">AEGX公式サイト</a>
 			<br>■お問い合わせ
 			<br>@-Information　https://supportform.jp/a-information
 			<br>(営業時間：平日10:00～17:00)
@@ -471,7 +483,7 @@
 		2) reveal + title-wrap slideIn（IntersectionObserverは1個）
 	========================= */
 	try{
-		const revealTargets = document.querySelectorAll(".main-inner.reveal");
+		const revealTargets = document.querySelectorAll(".reveal");
 
 		if (revealTargets.length) {
 		const revealIO = new IntersectionObserver((entries) => {
@@ -818,6 +830,56 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  const gmodal = document.getElementById("galleryModal");
+  const gimg   = document.getElementById("galleryModalImg");
+  if (!gmodal || !gimg) return;
+
+  let lastFocus = null;
+
+  function openGallery(src, alt=""){
+    if (!src) return;
+    lastFocus = document.activeElement;
+
+    gimg.src = src;
+    gimg.alt = alt;
+
+    gmodal.classList.add("is-open");
+    gmodal.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+    gmodal.querySelector(".gmodal-close")?.focus();
+  }
+
+  function closeGallery(){
+    gmodal.classList.remove("is-open");
+    gmodal.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    gimg.removeAttribute("src");
+    lastFocus?.focus?.();
+  }
+
+  // ✅ スマホだけ：gallery内の画像をタップで開く
+  document.addEventListener("click", (e) => {
+    // PCでは無効
+    if (window.matchMedia("(min-width: 769px)").matches) return;
+
+    // gallery内の画像（coming-box内にimgを入れる想定）
+    const img = e.target.closest("#gallery img");
+    if (img){
+      openGallery(img.getAttribute("data-full") || img.src, img.alt || "");
+      return;
+    }
+
+    // close
+    if (e.target.closest("#galleryModal [data-close='true']")) closeGallery();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && gmodal.classList.contains("is-open")) closeGallery();
+  });
+});
+
 </script>
 
 
@@ -839,7 +901,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				</div>
 
 				<p class="modal-desc" id="modalDesc"></p>
-				</div>
 			</div>
 		</div>
 
