@@ -746,7 +746,7 @@ a:hover{ text-decoration:underline; }
 }
 @media (max-width: 600px){
   .summary-text{
-    font-size: 12px;
+    font-size: 10px;
   }
 }
 /* 開いた状態 */
