@@ -29,15 +29,14 @@ img, svg{
 /* ===== nitiji：スマホ（デフォルト） ===== */
 /* ===== nitiji：相対値（スマホ〜PCまで滑らか） ===== */
 .nitiji{
-  margin-top: 250px;
+  margin-top: 350px;
   text-align: center;
 }
 
 /* スマホだけ上書き */
 @media (max-width: 600px){
   .nitiji{
-    margin-top: 150px; 
-    font-size: 32px;/* 好きに調整：16〜32くらいが無難 */
+    margin-top: 250px; 
   }
 }
 
@@ -268,6 +267,7 @@ a:hover{ text-decoration:underline; }
   width: min(var(--max), calc(100% - (var(--padX) * 2)));
   margin: 0 auto;
   margin-top: 40px;
+  margin-bottom: 150px;
   text-align:center;
 }
 @media (max-width: 820px){
