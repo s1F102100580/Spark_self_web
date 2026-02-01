@@ -37,7 +37,7 @@ img, svg{
 @media (max-width: 600px){
   .nitiji{
     margin-top: 150px; 
-    font-size: large;/* 好きに調整：16〜32くらいが無難 */
+    font-size: 32px;/* 好きに調整：16〜32くらいが無難 */
   }
 }
 
@@ -50,7 +50,14 @@ img, svg{
   line-height: 1.15;
 
   /* 最小(スマホ) → 可変 → 最大(PC=80px) */
-  font-size: clamp(22px, 6vw, 80px);
+  font-size:80px;
+}
+
+@media (max-width: 600px){
+  .nitiji p{
+    margin-top: 150px; 
+    font-size: 32px;/* 好きに調整：16〜32くらいが無難 */
+  }
 }
 
 .date-blue{
