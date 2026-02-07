@@ -8,11 +8,14 @@
   <meta name="description" content="SPARK_SELFの公式サイト。公演情報、チケット、出演者情報など。">
   <link rel="stylesheet" href="Spark.css">
   <link rel="icon" href="img/SSico.png" type="image/png" sizes="32x32">
+  <link rel="canonical" href="https://sparkself.live/">
+
   <meta name='keywords' content='SPARK _SELF,スパークセルフ,EB,avexEB,' />
-　<meta property="og:site_name" content="SPARK _SELF" />
-　<meta property="og:title" content="SPARK _SELF 2026" />
-　<meta property="og:description" content="2026.02.28 代官山UNIT｜Gum-9 / Fish and Lips / らそんぶる" />
-　<meta property="og:url" content="https://sparkself26.vercel.app/" />
+  <meta property="og:site_name" content="SPARK _SELF" />
+  <meta property="og:title" content="SPARK _SELF 2026" />
+  <meta property="og:description" content="2026.02.28 代官山UNIT｜Gum-9 / Fish and Lips / らそんぶる" />
+  <meta property="og:url" content="https://sparkself.live/" />
+
 
 <!-- 構造化データ：WebSite -->
 <script type="application/ld+json">
@@ -20,32 +23,26 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "SPARK _SELF",
-  "url": "https://sparkself26.vercel.app/"
+  "url": "https://sparkself.live/"
 }
 </script>
 
 </head>
 
-<script>
 
-  // 画像のドラッグも無効（PC）
-  document.addEventListener('dragstart', (e) => {
-    if (e.target.tagName === 'IMG') e.preventDefault();
-  });
-</script>
-
-<!-- Gallery Lightbox Modal -->
-<div class="gmodal" id="galleryModal" aria-hidden="true">
-  <div class="gmodal-overlay" data-close="true"></div>
-
-  <div class="gmodal-panel" role="dialog" aria-modal="true" aria-label="画像プレビュー">
-    <button class="gmodal-close" type="button" aria-label="閉じる" data-close="true">×</button>
-    <img class="gmodal-img" id="galleryModalImg" alt="">
-  </div>
-</div>
 
 
 <body>
+
+	<!-- Gallery Lightbox Modal -->
+	<div class="gmodal" id="galleryModal" aria-hidden="true">
+		<div class="gmodal-overlay" data-close="true"></div>
+
+		<div class="gmodal-panel" role="dialog" aria-modal="true" aria-label="画像プレビュー">
+			<button class="gmodal-close" type="button" aria-label="閉じる" data-close="true">×</button>
+			<img class="gmodal-img" id="galleryModalImg" alt="">
+		</div>
+	</div>
 	
 	<!-- shooting star layer（JSで中身を作る） -->
 
@@ -79,7 +76,7 @@
 
 	<section class="hero-top" id="top" aria-label="Hero">
     <div class="hero-inner">
-		<img class="hero-logo" src="img/SNS_real.png" alt="Spark_Self" />
+		<img class="hero-logo hero-logo--sns" src="img/SNS_real.png" alt="Spark_Self" />
     	<img class="hero-logo" src="img/SSbar.png" alt="Spark_Self" />
 		<img class="hero-logo2" src="img/avex.png" alt="Spark_Self" />
     </div>
@@ -115,6 +112,9 @@
       <nav class="nav" aria-label="グローバルメニュー">
 		<a href="#stage">DATE・VENUE</a>
         <a href="#artists">ARTISTS</a>
+		<a href="#summary">summary</a>
+		<a href="#timetable">TIMETABLE</a>
+		<a href="#enjoy">HOW TO ENJOY</a>
         <a href="#ticket">TICKETS</a>
 		<a href="#gallery">GALLERY</a>
 		<a href="#about">ABOUT</a>
@@ -134,6 +134,9 @@
       <nav class="drawer-nav" aria-label="モバイルメニュー">
 		<a href="#stage">DATE・VENUE</a>
         <a href="#artists">ARTISTS</a>
+		<a href="#summary">summary</a>
+		<a href="#timetable">TIMETABLE</a>
+		<a href="#enjoy">HOW TO ENJOY</a>
         <a href="#ticket">TICKETS</a>
 		<a href="#gallery">GALLERY</a>
 		<a href="#about">ABOUT</a>
@@ -142,52 +145,39 @@
     </div>
   </header>
 
+
+
   <!-- 仮の本文（確認用） -->
 	<main class="main" id="main">
-	<div class="main-inner reveal">
-		<section id="summary" aria-label="概要">
+		<div class="main-inner reveal">
+				<section id="summary" aria-label="概要">
 
-		<h2 class="section-title">らしさ、全開！！</h2>
+				<h2 class="section-title no-upper">What is SPARK _SELF?</h2>
+				<div class="card--summarybg summary-body">
+				<div class="lead summary-text" id="summaryText">
+					若者の”リアル”を歌にのせ、
+					<br>SNSで若者から大きな共感を集める3組が集結。
+					<br>三者三様の表現で、
+					<br>あなたの心に寄り添う音楽を届けます。
+					<br>
+					<br>さらに、会場内には、アーティスト3組自身の
+					<br>”リアル”に迫る展示コーナーを設置。
 
-		<div class="card--summarybg summary-body">
-			<p class="lead summary-text" id="summaryText">
-			SNS発のバイラルヒットによって
-			<br>注目を集めるアーティストは、どうしても
-			<br>ヒット曲のみのイメージが
-			<br>先行してしまう傾向があります。<br><br>
-			しかし、その裏側には数多くの楽曲や、
-			<br>アーティスト自身の魅力・人間性が
-			<br>確かに存在しています。<br><br>
+					<div class="summary-gallery">
+					<img class="summary-img" src="img/raso.jfif" alt="展示コーナー">
+					<img class="summary-img" src="img/raso.jfif" alt="展示コーナー">
+					</div>
 
-			「SPARK _SELF」では、
-			<br>SNSだけでは見られない
-			<br>アーティストの「リアル」を
-			<br>多角的に表現します。
-			<br>アーティストのパフォーマンスだけではなく、
-			<br>会場の特性を十二分に活用した場内装飾など、<br>
-			様々な仕掛けがあなたの感情に訴えかけます。<br><br>
 
-			さらに、アーティスト・来場者・運営スタッフも
-			<br>そのすべてが「若者」だからこそ、<br>
-			全ての若者世代の「リアル」を。
-			<br>
-			<br>
-			この会場にしかない、
-			<br>同世代ならではの感性と熱量が
-			<br>会場を埋め尽くします。
-			<br>
-			<br>この夜が、
-			<br>あなたの「リアル」を輝かせますように。
-			<br>かつてない没入型・新感覚エンタテインメントを
-			<br>ぜひ、お見逃しなく！
-			</p>
-
-			<button class="summary-cta" type="button" id="summaryToggle"
-			aria-expanded="false" aria-controls="summaryText">
-			▼What is SPARK _SELF?
-			</button>
-		</div>
-
+					自分の本音を吐き出し、
+					<br>アーティストの歌に背中を押される。
+					<br>
+					<br>そして、「自分らしさ」を取り戻す。
+					<br><br>
+					ここでしか味わえない一夜限りのライブ体験が
+					<br>「SPARK _SELF」です。
+				</div>
+		</div>	
 	</div>
 
 	<div class="main-inner reveal">
@@ -198,47 +188,53 @@
 
 				<article class="artist-row"
 				data-name="らそんぶる"
-				data-desc="SNSを起点に広がる共感とリアリティを、等身大の言葉とメロディで描くアーティスト。"
-				data-img="img/raso.jfif">
+				data-desc="あなたの心の太陽になるバンド">
 
-				<!-- 左：写真 -->
+				<!-- 左：写真（スマホでもここが上にくる） -->
 				<div class="artist-photo">
 					<img src="img/raso.jfif" alt="らそんぶる">
-					<button class="artist-name-sp" type="button">らそんぶる</button>
+					<button class="artist-plus" type="button" aria-label="詳細を開く">▾</button>
 				</div>
 
-				<!-- 右：説明 -->
+				<!-- 右：テキスト（スマホでは“下”に落ちる） -->
 				<div class="artist-text">
 					<img class="artist-logo" src="img/raso_rogo.png" alt="らそんぶる ロゴ">
-					<p class="artist-desc">
+
+					<!-- PCでは今の長文をそのまま -->
+					<p class="artist-desc artist-desc--full">
 					“あなたの心の太陽になるバンド”<br>
-					2024年1月に結成。<br>
-					バンドの運営は全て自主で、<br>
-					現在発表されている曲の作詞作曲は<br>
-					全てギターボーカルそらによるもの。<br>
-					メジャー、インディー、マネージメントなど問わず<br>
-					ライブには常に関係者が押し寄せるほど話題に。<br>
-					一緒に歌えるくらいポップなメロディーに<br>
-					20歳らしい等身大の歌詞が<br>
-					同世代、年下世代（中高生）にも<br>
-					響き同性からも支持を得ている。<br>
+                    2024年1月に結成。<br>
+                    バンドの運営は全て自主で、<br>
+                    現在発表されている曲の作詞作曲は<br>
+                    全てギターボーカルそらによるもの。<br>
+                    メジャー、インディー、マネージメントなど問わず<br>
+                    ライブには常に関係者が押し寄せるほど話題に。<br>
+                    一緒に歌えるくらいポップなメロディーに<br>
+                    若者らしい等身大の歌詞が<br>
+                    同世代、年下世代（中高生）にも<br>
+                    響き同性からも支持を得ている。<br>
 					</p>
 				</div>
-
 				</article>
+
+
 
 				<article class="artist-row"
 				data-name="Gum-9"
-				data-desc="重厚なバンドサウンドとエモーショナルなボーカルが交差する4人組ロックバンド。"
-				data-img="img/gum.jfif">
+				data-desc="重厚なバンドサウンドとエモーショナルなボーカルが交差する4人組ロックバンド。">
 
+				<!-- 左：写真（スマホでもここが上にくる） -->
 				<div class="artist-photo">
 					<img src="img/Gum-9.jpg" alt="Gum-9">
+					<button class="artist-plus" type="button" aria-label="詳細を開く">▾</button>
 				</div>
 
+				<!-- 右：テキスト（スマホでは“下”に落ちる） -->
 				<div class="artist-text">
 					<img class="artist-logo" src="img/Gum-9_rogo.png" alt="Gum-9 ロゴ">
-					<p class="artist-desc">
+
+					<!-- PCでは今の長文をそのまま -->
+					<p class="artist-desc artist-desc--full">
 					- 情けない僕と君が、誰かの大切で在れますように -<br>
 					九段中等教育学校の同級生4人で結成。<br>
 					4人組ロックバンド・Gum-9（ガムナイン）。 <br>
@@ -253,18 +249,23 @@
 				</div>
 				</article>
 
+
 				<article class="artist-row"
 				data-name="Fish and Lips"
-				data-desc="ポップネスとロックの衝動を併せ持つ、若者世代を象徴するバンド。"
-				data-img="img/fishjpeg.jpeg">
+				data-desc="ポップネスとロックの衝動を併せ持つ、若者世代を象徴するバンド。">
 
+				<!-- 左：写真（スマホでもここが上にくる） -->
 				<div class="artist-photo">
 					<img src="img/fishjpeg.jpeg" alt="Fish and Lips">
+					<button class="artist-plus" type="button" aria-label="詳細を開く">▾</button>
 				</div>
 
+				<!-- 右：テキスト（スマホでは“下”に落ちる） -->
 				<div class="artist-text">
-					<img class="artist-2logo" src="img/fish_logo2.png" alt="Fish and Lips ロゴ">
-					<p class="artist-desc">
+					<img class="artist-logo2" src="img/fish_logo2.png" alt="Fish and Lips ロゴ">
+
+					<!-- PCでは今の長文をそのまま -->
+					<p class="artist-desc artist-desc--full">
 					2022年1月結成、埼玉県鳩ヶ谷発スリーピースバンド、<br>
 					Fish and Lips ( 通称：フィシュリ）。<br>
 					思わず口ずさんでしまいたくなるキャッチーな歌と、<br>
@@ -283,6 +284,103 @@
 		</section>
 	</div>
 
+
+	<div class="main-inner reveal">
+	<section class="section" id="timetable" aria-label="TIMETABLE">
+		<h2 class="section-title">TIMETABLE</h2>
+
+		<div class="card timetable-card">
+		<dl class="tt">
+			<div class="tt-row">
+			<dt class="tt-time">17:00-</dt>
+			<dd class="tt-item">開場</dd>
+			</div>
+
+			<div class="tt-row">
+			<dt class="tt-time">18:00-</dt>
+			<dd class="tt-item">アーティストライブ1組目</dd>
+			</div>
+
+			<div class="tt-row">
+			<dt class="tt-time">18:45-</dt>
+			<dd class="tt-item">アーティストライブ2組目</dd>
+			</div>
+
+			<div class="tt-row">
+			<dt class="tt-time">19:30-</dt>
+			<dd class="tt-item">アーティストライブ3組目</dd>
+			</div>
+
+			<div class="tt-row">
+			<dt class="tt-time">20:00頃</dt>
+			<dd class="tt-item">終演予定</dd>
+			</div>
+		</dl>
+
+		<p class="tt-note">※進行状況により時間が前後する場合があります。</p>
+		</div>
+	</section>
+	</div>
+
+	<div class="main-inner reveal">
+	<section class="section" id="enjoy" aria-label="How to enjoy SPARK _SELF">
+		<h2 class="section-title">How to<br>  SPARK <span class="under"> Your</span>SELF</h2>
+
+		<div class="enjoy-steps">
+
+		<!-- 1 -->
+		<article class="enjoy-step">
+			<div class="enjoy-media">
+			<img src="img/raso.jfif" alt="入場・会場内体験" loading="lazy">
+			</div>
+
+			<div class="enjoy-text">
+			<p class="enjoy-time">入場・会場内展示を鑑賞</p>
+
+			<p class="enjoy-desc">
+				アーティストの歴史、歌詞の展示を鑑賞。<br>
+				お気に入りの歌詞を見つけたり、あなたの知らなかったアーティストの一面に出会う<br>
+			</p>
+			</div>
+		</article>
+
+		<!-- 2 -->
+		<article class="enjoy-step">
+			<div class="enjoy-media">
+			<img src="img/raso.jfif" alt="メッセージボード" loading="lazy">
+			</div>
+
+			<div class="enjoy-text">
+			<p class="enjoy-time">メッセージボードに書き込む</p>
+
+			<p class="enjoy-desc">
+				普段あまり誰にも言えない本音を書き、<br>
+				自分自身と向き合う
+			</p>
+			</div>
+		</article>
+
+		<!-- 3 -->
+		<article class="enjoy-step">
+			<div class="enjoy-media">
+			<img src="img/raso.jfif" alt="ライブ開始" loading="lazy">
+			</div>
+
+			<div class="enjoy-text">
+			<p class="enjoy-time">ライブ開始</p>
+
+			<p class="enjoy-desc">
+				三者三様の魅力に触れる
+			</p>
+			</div>
+		</article>
+
+		</div>
+	</section>
+	</div>
+
+
+
 	<div class="main-inner reveal">
 	<section class="section" id="ticket" aria-label="チケット">
 		<h2 class="section-title">tickets</h2>
@@ -292,13 +390,15 @@
 		<p class="price-value">一般¥4,900 / 学割¥3,900 / 当日¥5,400</p>
 		</div>
 
-		<p class="ticket-note">※ドリンク代(600円・現金のみ)必須<br>※未就学児入場不可</p>
+		<p class="pripri">※ドリンク代(600円・現金のみ)必須<br>※未就学児入場不可</p>
 
 		<!-- 先行販売 -->
 		<div class="ticket-sale">
 		<p class="sale-kicker">【オフィシャル先着先行】</p>
-		<p>※先着順のため予定枚数に達し次第終了となります。</p>
-		<p class="sale-date">2026年1月21日(水)12:00 〜 2026年2月12日(木)23:59</p>
+		<p class="pripri">※先着順のため予定枚数に達し次第終了となります。</p>
+		<p class="sale-date">2026年1月21日(水)12:00〜2026年2月12日(木)23:59</p>
+
+		<p class="pripri">※各プレイガイドのロゴをタップして購入へ</p>
 
 		<a class="sale-link" href="https://eplus.jp/spark_self/" target="_blank" rel="noopener">
 			<img class="sale-link-img" src="img/epul.png" alt="e-plusで購入">
@@ -312,6 +412,109 @@
 		</div>
 	</section>
 	</div>
+
+
+	
+
+	<div class="main-inner reveal">
+		<section class="music-section" id="music" aria-label="MOVIE">
+			<h2 class="section-title">MOVIE</h2>
+
+			<div class="yt-grid">
+				<div class="yt-item">
+				<div class="yt-embed">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/lPB6UbOcFJI?si=YinZP2KJxxH91XXE&amp;start=60" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+				</div>
+
+				<div class="yt-item">
+				<div class="yt-embed">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/N17lKYYb2FE?si=0FLmz6CfA3X64Q3k&amp;start=43" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+				</div>
+
+				<div class="yt-item">
+				<div class="yt-embed">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/mvENOSr4BvQ?si=3-4bL4bHKkMm4lAW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+				</div>
+
+				<div class="yt-item">
+				<div class="yt-embed">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/xY_yevBbXWo?si=bu52wZ84cQ7s0eId" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+				</div>
+
+				<div class="yt-item">
+				<div class="yt-embed">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/e5FE9jboTlg?si=OSSlsIUQOUOj-mKC&amp;start=59" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+				</div>
+
+				<div class="yt-item">
+				<div class="yt-embed">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/OaIYaqxbbLg?si=KbOxXuXLUTy7KTNr&amp;start=57" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+				</div>
+				</div>
+			</div>
+		</section>
+
+
+	</div>
+
+	<div class="main-inner reveal">
+		<section class="section" id="" aria-label="">
+			<div class="concept-fit">
+				<div class="concept-fit__inner" id="conceptFitInner">
+					<div class="card concept-card">
+					<h2 class="section-title">MESSAGE</h2>
+
+					<div class="lead fixed-lines concept-text">
+						<span class="line">SNS発のバイラルヒットによって</span>
+						<span class="line">注目を集めるアーティストは、どうしても</span>
+						<span class="line">ヒット曲のみのイメージが</span>
+						<span class="line">先行してしまう傾向があります。</span>
+
+						<span class="line blank">&nbsp;</span>
+
+						<span class="line">しかし、その裏側には数多くの楽曲や、</span>
+						<span class="line">アーティスト自身の魅力・人間性が</span>
+						<span class="line">確かに存在しています。</span>
+
+						<span class="line blank">&nbsp;</span>
+
+						<span class="line">「SPARK _SELF」では、</span>
+						<span class="line">SNSだけでは見られない</span>
+						<span class="line">アーティストの「リアル」を</span>
+						<span class="line">多角的に表現します。</span>
+						<span class="line">アーティストのパフォーマンスだけではなく、</span>
+						<span class="line">会場の特性を十二分に活用した場内装飾など、</span>
+						<span class="line">様々な仕掛けがあなたの感情に訴えかけます。</span>
+
+						<span class="line blank">&nbsp;</span>
+
+						<span class="line">さらに、アーティスト・来場者・運営スタッフも</span>
+						<span class="line">そのすべてが「若者」だからこそ、</span>
+						<span class="line">全ての若者世代の「リアル」を。</span>
+
+						<span class="line blank">&nbsp;</span>
+
+						<span class="line">この会場にしかない、</span>
+						<span class="line">同世代ならではの感性と熱量が</span>
+						<span class="line">会場を埋め尽くします。</span>
+
+						<span class="line blank">&nbsp;</span>
+
+						<span class="line">この夜が、</span>
+						<span class="line">あなたの「リアル」を輝かせますように。</span>
+						<span class="line">かつてない没入型・新感覚体験をお届けします。</span>
+					</div>
+					</div>
+				</div>
+			</div>	
+		</section>
+	</div>
+
 
 	<div class="main-inner reveal">
 	<section class="section" id="news" aria-label="news">
@@ -371,7 +574,15 @@
 			</div>
 
 			<div class="coming-box" aria-label="Coming soon">
-				<p class="coming-text">COMING SOON...</p>
+				<img src="img/g3.JPG" class="coming-text">
+			</div>
+
+			<div class="coming-box" aria-label="Coming soon">
+				<img src="img/g4.JPG" class="coming-text">
+			</div>
+
+			<div class="coming-box" aria-label="Coming soon">
+				<img src="img/g5.jpg" class="coming-text">
 			</div>
 
 			<div class="coming-box" aria-label="Coming soon">
@@ -393,9 +604,10 @@
 		<div class="card">
 			<p class="lead">
 			<br>■AEGX 公演ページ
-			<br><a  href="https://aegx.jp/schedule/02/2026/2290/" target="_blank" rel="noopener">AEGX公式サイト</a>
+			<br><a  href="https://aegx.jp/schedule/02/2026/2290/" target="_blank" >https://aegx.jp/schedule/02/2026/2290/</a>
 			<br>■お問い合わせ
-			<br>@-Information　https://supportform.jp/a-information
+			<br>@-Information 
+			<br><a  href="https://supportform.jp/a-information" target="_blank" >https://supportform.jp/a-information</a>
 			<br>(営業時間：平日10:00～17:00)
 
 			<br>主催：エイベックス・エンタテインメント
@@ -410,7 +622,9 @@
 			<br>エンタメ業界の最前線で活躍するプロフェショナルによる実践的な講義と、
 			<br>インターンシップをはじめとした実践を伴う活動の経験が、受講生たちを大きな成長に導きます。
 
-			<br><br><a href="https://eb.avex.jp/">EB公式サイトはこちら</a>
+			<br><br>
+			<a class="link-underline" href="https://eb.avex.jp/">EB公式サイトはこちら</a>
+
 
 			</p>
 		</div>
@@ -452,482 +666,12 @@
 		<p>© SPARK _SELF 実行委員会</p>
 	</footer>
 
-
-
-	<script>
-	document.documentElement.classList.add("js");
-
-	document.addEventListener("click", (e) => {
-	const item = e.target.closest(".artist-item");
-	if (!item) return;
-
-	// PCでは何もしない
-	if (window.matchMedia("(min-width: 769px)").matches) return;
-
-	// SPのみモーダル
-	openArtistModal({
-		name: item.dataset.name,
-		desc: item.dataset.desc,
-		img:  item.dataset.img
-	});
-	});
-
-
-	document.addEventListener("DOMContentLoaded", () => {
-
-
-
-		try{
-			const wrap = document.querySelector("#summary .summary-body");
-			const btn  = document.getElementById("summaryToggle");
-			const text = document.getElementById("summaryText");
-
-			if (wrap && btn && text){
-				btn.addEventListener("click", () => {
-				const open = wrap.classList.toggle("is-open");
-				btn.setAttribute("aria-expanded", String(open));
-				btn.textContent = open ? "閉じる" : "▼What is SPARK_SELF?";
-				});
-			}
-			}catch(err){
-			console.error("[summary toggle error]", err);
-			}
-
-	/* =========================
-		1) section-title split（title-wrapで包む）
-	========================= */
-	try{
-		document.querySelectorAll(".section-title").forEach((el) => {
-		if (el.dataset.splitDone === "1") return;
-
-		const text = (el.textContent || "").trim();
-		el.textContent = "";
-
-		const wrap = document.createElement("span");
-		wrap.className = "title-wrap";
-		el.appendChild(wrap);
-
-		[...text].forEach((ch, i) => {
-			const span = document.createElement("span");
-			span.className = "char";
-			span.style.setProperty("--i", i);
-			span.textContent = (ch === " ") ? "\u00A0" : ch;
-			wrap.appendChild(span);
-		});
-
-		el.dataset.splitDone = "1";
-		});
-	}catch(err){
-		console.error("[split section-title error]", err);
-	}
-
-	/* =========================
-		2) reveal + title-wrap slideIn（IntersectionObserverは1個）
-	========================= */
-	try{
-		const revealTargets = document.querySelectorAll(".reveal");
-
-		if (revealTargets.length) {
-		const revealIO = new IntersectionObserver((entries) => {
-			entries.forEach((ent) => {
-			if (!ent.isIntersecting) return;
-
-			// main-inner全体のreveal
-			ent.target.classList.add("is-in");
-
-			// タイトル塊：スライドイン開始
-			ent.target
-				.querySelectorAll(".section-title .title-wrap")
-				.forEach((w) => w.classList.add("is-animated"));
-
-			revealIO.unobserve(ent.target);
-			});
-		}, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
-
-		revealTargets.forEach((el) => revealIO.observe(el));
-		}
-	}catch(err){
-		console.error("[reveal/title animation error]", err);
-	}
-
-	/* =========================
-		3) Header / Drawer
-	========================= */
-	try{
-		const header = document.getElementById("header");
-		const toggle = header?.querySelector(".nav-toggle");
-		const drawer = header?.querySelector(".drawer");
-		const overlay = header?.querySelector(".overlay");
-
-		function setOpen(isOpen) {
-		if (!header || !toggle || !drawer || !overlay) return;
-		header.classList.toggle("is-open", isOpen);
-		toggle.setAttribute("aria-expanded", String(isOpen));
-		drawer.setAttribute("aria-hidden", String(!isOpen));
-		overlay.setAttribute("aria-hidden", String(!isOpen));
-		}
-
-		toggle?.addEventListener("click", () => {
-		setOpen(!header.classList.contains("is-open"));
-		});
-
-		overlay?.addEventListener("click", () => setOpen(false));
-		header?.querySelectorAll(".drawer-nav a").forEach((a) => {
-		a.addEventListener("click", () => setOpen(false));
-		});
-
-		window.addEventListener("resize", () => {
-		if (window.innerWidth > 980) setOpen(false);
-		});
-	}catch(err){
-		console.error("[header/drawer error]", err);
-	}
-
-	/* =========================
-		4) Artist Modal
-	========================= */
-	try{
-		const artistModal = document.getElementById("artistModal");
-		const modalTitle = document.getElementById("modalTitle");
-		const modalDesc  = document.getElementById("modalDesc");
-		const modalImg   = document.getElementById("modalImg");
-		let lastFocus = null;
-
-		function openArtistModal({ name, desc, img }) {
-		if (!artistModal) return;
-		lastFocus = document.activeElement;
-
-		if (modalTitle) modalTitle.textContent = name || "";
-		if (modalDesc)  modalDesc.textContent  = desc || "";
-		if (modalImg) {
-			modalImg.src = img || "";
-			modalImg.alt = name || "";
-		}
-
-		artistModal.classList.add("is-open");
-		artistModal.setAttribute("aria-hidden", "false");
-		document.documentElement.style.overflow = "hidden";
-		artistModal.querySelector(".modal-close")?.focus();
-		}
-
-		function closeArtistModal() {
-		if (!artistModal) return;
-		artistModal.classList.remove("is-open");
-		artistModal.setAttribute("aria-hidden", "true");
-		document.documentElement.style.overflow = "";
-		lastFocus?.focus?.();
-		}
-
-		document.addEventListener("click", (e) => {
-		const nameBtn = e.target.closest(".artist-name-btn");
-		if (nameBtn) {
-			const item = nameBtn.closest(".artist-item");
-			openArtistModal({
-			name: item?.dataset.name,
-			desc: item?.dataset.desc,
-			img:  item?.dataset.img
-			});
-			return;
-		}
-
-		const imgEl = e.target.closest(".artist-img");
-		if (imgEl) {
-			const item = imgEl.closest(".artist-item");
-			if (item) {
-			openArtistModal({
-				name: item.dataset.name,
-				desc: item.dataset.desc,
-				img:  item.dataset.img
-			});
-			return;
-			}
-		}
-
-		if (e.target.closest("[data-close='true']")) closeArtistModal();
-		});
-
-		document.addEventListener("keydown", (e) => {
-		if (e.key === "Escape" && artistModal?.classList.contains("is-open")) {
-			closeArtistModal();
-		}
-		});
-	}catch(err){
-		console.error("[artist modal error]", err);
-	}
-
-	/* =========================
-		5) EBメッセージ：モーダル
-	========================= */
-	try{
-		const msgModal  = document.getElementById("msgModal");
-		const msgName   = document.getElementById("msgName");
-		const msgText   = document.getElementById("msgText");
-		const msgAvatar = document.getElementById("msgAvatar");
-
-		function openMsg({ name, img, msg }) {
-		if (!msgModal) return;
-		if (msgName) msgName.textContent = name || "";
-		if (msgText) msgText.textContent = msg || "";
-		if (msgAvatar) {
-			msgAvatar.src = img || "";
-			msgAvatar.alt = name || "";
-		}
-		msgModal.classList.add("is-open");
-		msgModal.setAttribute("aria-hidden", "false");
-		document.body.style.overflow = "hidden";
-		}
-
-		function closeMsg() {
-		if (!msgModal) return;
-		msgModal.classList.remove("is-open");
-		msgModal.setAttribute("aria-hidden", "true");
-		document.body.style.overflow = "";
-		}
-
-		document.querySelectorAll(".person").forEach((btn) => {
-		btn.addEventListener("click", () => {
-			openMsg({
-			name: btn.dataset.name,
-			img:  btn.dataset.img,
-			msg:  btn.dataset.msg
-			});
-		});
-		});
-
-		msgModal?.querySelectorAll("[data-close]").forEach((el) => {
-		el.addEventListener("click", closeMsg);
-		});
-
-		document.addEventListener("keydown", (e) => {
-		if (e.key === "Escape" && msgModal?.classList.contains("is-open")) {
-			closeMsg();
-		}
-		});
-	}catch(err){
-		console.error("[msg modal error]", err);
-	}
-
-	/* =========================
-		6) shooting / floating star 後処理
-	========================= */
-	});
-	</script>
-
-	<script>
-document.documentElement.classList.add("js");
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* ・・・（あなたの既存処理 1)〜5) はそのまま）・・・ */
-
-  /* =========================
-     6) shooting star を複製して全体に出す
-  ========================= */
-  try{
-    const layer = document.querySelector(".shooting-layer");
-    if (!layer) return;
-
-    const COUNT = 14;              // ここを増やすほど“画面全体感”が出る
-    const TOP_MIN = 5;             // 上から何%〜
-    const TOP_MAX = 85;            // 〜何%まで（下すぎると見えづらいなら下げる）
-
-    for(let i=0; i<COUNT; i++){
-      const s = document.createElement("span");
-      s.className = "shooting-star";
-
-      // 位置をばら撒く（右から出るので x は 110% 固定でOK）
-      const y = TOP_MIN + Math.random() * (TOP_MAX - TOP_MIN);
-
-      // ばらつき（遅延/速度/角度）
-      const delay = 0.1 + Math.random() * 1.2;     // 0.1〜1.3s
-      const dur   = 0.9 + Math.random() * 0.7;     // 0.9〜1.6s
-      const rot   = (-18 + Math.random() * 12);    // -18〜-6deg（/ の傾き調整）
-
-      s.style.setProperty("--y", `${y}%`);
-      s.style.setProperty("--x", `110%`);
-      s.style.setProperty("--delay", `${delay}s`);
-      s.style.setProperty("--dur", `${dur}s`);
-      s.style.setProperty("--rot", `${rot}deg`);
-
-      layer.appendChild(s);
-
-      // 1個ずつ終わったら消す（“残したい”ならこの remove を消す）
-      s.addEventListener("animationend", () => s.remove());
-    }
-
-    // 全部消えたらレイヤーも消す（残したいなら消す）
-    setTimeout(() => {
-      if (layer.childElementCount === 0) layer.remove();
-    }, 4000);
-
-  }catch(err){
-    console.error("[shooting star multi error]", err);
-  }
-
-  /* floating star の後処理はそのままでOK */
-});
-
-document.addEventListener("click",(e)=>{
-  const row = e.target.closest(".artist-row");
-  if(!row) return;
-
-  if(window.matchMedia("(min-width:769px)").matches) return;
-
-  openArtistModal({
-    name: row.dataset.name,
-    desc: row.dataset.desc,
-    img:  row.dataset.img
-  });
-});
-
-
-
-</script>
-
-<script>
-document.documentElement.classList.add("js");
-
-document.addEventListener("DOMContentLoaded", () => {
-  // ===== Artist Modal =====
-  const artistModal = document.getElementById("artistModal");
-  const modalTitle  = document.getElementById("modalTitle");
-  const modalDesc   = document.getElementById("modalDesc");
-  const modalImg    = document.getElementById("modalImg");   // ←今は使ってないけど残してOK
-  const modalLogo   = document.getElementById("modalLogo");  // ★追加
-  let lastFocus = null;
-
-  function openArtistModalFromRow(row){
-    if (!artistModal || !row) return;
-    if (window.matchMedia("(min-width: 769px)").matches) return;
-
-    lastFocus = document.activeElement;
-
-    const name =
-      row.dataset.name ||
-      row.querySelector(".artist-name-sp")?.textContent ||
-      row.querySelector(".artist-logo")?.alt ||
-      "";
-
-    const fullDesc =
-      row.querySelector(".artist-desc")?.innerText?.trim() ||
-      row.dataset.desc ||
-      "";
-
-    // ★ロゴ拾う（artist-logo / artist-2logo どっちでもOKにする）
-    const logoEl =
-      row.querySelector(".artist-text img.artist-logo") ||
-      row.querySelector(".artist-text img.artist-2logo") ||
-      row.querySelector(".artist-text img");
-
-    const logoSrc = logoEl?.getAttribute("src") || "";
-
-    if (modalTitle) modalTitle.textContent = name;
-    if (modalDesc)  modalDesc.textContent  = fullDesc;
-
-    // ★ロゴ表示
-    if (modalLogo){
-      if (logoSrc){
-        modalLogo.src = logoSrc;
-        modalLogo.style.display = "block";
-        modalLogo.setAttribute("aria-hidden", "true");
-      } else {
-        modalLogo.removeAttribute("src");
-        modalLogo.style.display = "none";
-      }
-    }
-
-    artistModal.classList.add("is-open");
-    artistModal.setAttribute("aria-hidden", "false");
-    document.documentElement.style.overflow = "hidden";
-    artistModal.querySelector(".modal-close")?.focus();
-  }
-
-  function closeArtistModal(){
-    if (!artistModal) return;
-    artistModal.classList.remove("is-open");
-    artistModal.setAttribute("aria-hidden", "true");
-    document.documentElement.style.overflow = "";
-    lastFocus?.focus?.();
-  }
-
-  document.addEventListener("click", (e) => {
-    const row = e.target.closest(".artist-row");
-    if (!row) return;
-
-    const isPhoto = e.target.closest(".artist-photo img");
-    const isName  = e.target.closest(".artist-name-sp");
-
-    if (isPhoto || isName){
-      openArtistModalFromRow(row);
-      return;
-    }
-
-    if (e.target.closest("[data-close='true']")) closeArtistModal();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && artistModal?.classList.contains("is-open")) {
-      closeArtistModal();
-    }
-  });
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const gmodal = document.getElementById("galleryModal");
-  const gimg   = document.getElementById("galleryModalImg");
-  if (!gmodal || !gimg) return;
-
-  let lastFocus = null;
-
-  function openGallery(src, alt=""){
-    if (!src) return;
-    lastFocus = document.activeElement;
-
-    gimg.src = src;
-    gimg.alt = alt;
-
-    gmodal.classList.add("is-open");
-    gmodal.setAttribute("aria-hidden", "false");
-    document.documentElement.style.overflow = "hidden";
-    gmodal.querySelector(".gmodal-close")?.focus();
-  }
-
-  function closeGallery(){
-    gmodal.classList.remove("is-open");
-    gmodal.setAttribute("aria-hidden", "true");
-    document.documentElement.style.overflow = "";
-    gimg.removeAttribute("src");
-    lastFocus?.focus?.();
-  }
-
-  // ✅ スマホだけ：gallery内の画像をタップで開く
-  document.addEventListener("click", (e) => {
-    // PCでは無効
-    if (window.matchMedia("(min-width: 769px)").matches) return;
-
-    // gallery内の画像（coming-box内にimgを入れる想定）
-    const img = e.target.closest("#gallery img");
-    if (img){
-      openGallery(img.getAttribute("data-full") || img.src, img.alt || "");
-      return;
-    }
-
-    // close
-    if (e.target.closest("#galleryModal [data-close='true']")) closeGallery();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && gmodal.classList.contains("is-open")) closeGallery();
-  });
-});
-
-</script>
-
-
-
-
-
+	<!-- Ticket Floating CTA -->
+	<div class="ticket-float" id="ticketFloat" aria-label="チケット購入">
+	<a class="ticket-float__btn" href="https://eplus.jp/spark_self/" target="_blank" rel="noopener">
+		チケットの申し込みはこちら
+	</a>	
+	</div>
 
 	<div class="modal" id="artistModal" aria-hidden="true">
 		<div class="modal-overlay" data-close="true"></div>
@@ -945,6 +689,428 @@ document.addEventListener("DOMContentLoaded", () => {
 				<p class="modal-desc" id="modalDesc"></p>
 			</div>
 		</div>
+	</div>
+
+<script>
+(() => {
+  // =========================================================
+  // 0) Utility
+  // =========================================================
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  // =========================================================
+  // 1) IMG drag 無効（PC）
+  // =========================================================
+  document.addEventListener("dragstart", (e) => {
+    if (e.target && e.target.tagName === "IMG") e.preventDefault();
+  });
+
+  // JS有効フラグ
+  document.documentElement.classList.add("js");
+
+  document.addEventListener("DOMContentLoaded", () => {
+    
+	// =========================================================
+	// 2) section-title を title-wrap で包む（HTML保持版）
+	//    ※ <br> や <span class="under"> を壊さない
+	// =========================================================
+	try {
+	document.querySelectorAll(".section-title").forEach((el) => {
+		if (el.dataset.wrapDone === "1") return;
+
+		// 既存HTMLを保持したまま、title-wrapで囲う
+		const html = el.innerHTML;
+
+		el.innerHTML = `<span class="title-wrap">${html}</span>`;
+		el.dataset.wrapDone = "1";
+	});
+	} catch (err) {
+	console.error("[section-title wrap error]", err);
+	}
+
+
+    // =========================================================
+    // 3) reveal（IntersectionObserver）
+    // =========================================================
+    try {
+      const targets = document.querySelectorAll(".reveal");
+      if (targets.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((ent) => {
+              if (!ent.isIntersecting) return;
+
+              ent.target.classList.add("is-in");
+
+              // タイトル塊アニメ開始
+              ent.target
+                .querySelectorAll(".section-title .title-wrap")
+                .forEach((w) => w.classList.add("is-animated"));
+
+              io.unobserve(ent.target);
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
+        );
+
+        targets.forEach((el) => io.observe(el));
+      }
+    } catch (err) {
+      console.error("[reveal error]", err);
+    }
+
+    // =========================================================
+    // 4) Header / Drawer（スマホメニュー）
+    // =========================================================
+	// ===== header height sync（スマホメニューのズレ防止）=====
+		const header = document.getElementById("header");
+
+		const syncHeaderH = () => {
+		if (!header) return;
+		const h = header.offsetHeight || 72;
+		document.documentElement.style.setProperty("--headerH", `${h}px`);
+		};
+
+		syncHeaderH();
+		window.addEventListener("resize", syncHeaderH, { passive: true });
+
+    try {
+		
+      const header = document.getElementById("header");
+      const toggle = header?.querySelector(".nav-toggle");
+      const drawer = header?.querySelector(".drawer");
+      const overlay = header?.querySelector(".overlay");
+
+      const setOpen = (open) => {
+        if (!header || !toggle || !drawer || !overlay) return;
+        header.classList.toggle("is-open", open);
+        toggle.setAttribute("aria-expanded", String(open));
+        drawer.setAttribute("aria-hidden", String(!open));
+        overlay.setAttribute("aria-hidden", String(!open));
+      };
+
+      toggle?.addEventListener("click", () => {
+        setOpen(!header.classList.contains("is-open"));
+      });
+
+      overlay?.addEventListener("click", () => setOpen(false));
+
+      header?.querySelectorAll(".drawer-nav a").forEach((a) => {
+        a.addEventListener("click", () => setOpen(false));
+      });
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 980) setOpen(false);
+      });
+    } catch (err) {
+      console.error("[header/drawer error]", err);
+    }
+
+    // =========================================================
+    // 5) Artist Modal（スマホだけ：写真 or 名前タップで開く）
+    // =========================================================
+    try {
+      const artistModal = document.getElementById("artistModal");
+      const modalTitle = document.getElementById("modalTitle"); // CSSで非表示でもOK
+      const modalDesc = document.getElementById("modalDesc");
+      const modalLogo = document.getElementById("modalLogo");
+      let lastFocus = null;
+
+      const openArtistModalFromRow = (row) => {
+        if (!artistModal || !row) return;
+        if (!isMobile()) return;
+
+        lastFocus = document.activeElement;
+
+        const name =
+          row.dataset.name ||
+          row.querySelector(".artist-name-sp")?.textContent?.trim() ||
+          "";
+
+        const desc =
+			row.querySelector(".artist-desc--full")?.innerText?.trim() ||
+			row.dataset.desc ||
+			row.querySelector(".artist-desc--teaser")?.innerText?.trim() ||
+			"";
+
+        // ロゴ（artist-logo / artist-2logo）
+        const logoEl =
+          row.querySelector(".artist-text img.artist-logo") ||
+          row.querySelector(".artist-text img.artist-2logo") ||
+          row.querySelector(".artist-text img");
+
+        const logoSrc = logoEl?.getAttribute("src") || "";
+
+        if (modalTitle) modalTitle.textContent = name;
+        if (modalDesc) modalDesc.textContent = desc;
+
+        if (modalLogo) {
+          if (logoSrc) {
+            modalLogo.src = logoSrc;
+            modalLogo.style.display = "block";
+          } else {
+            modalLogo.removeAttribute("src");
+            modalLogo.style.display = "none";
+          }
+        }
+
+        artistModal.classList.add("is-open");
+        artistModal.setAttribute("aria-hidden", "false");
+        document.documentElement.style.overflow = "hidden";
+        artistModal.querySelector(".modal-close")?.focus();
+      };
+
+      const closeArtistModal = () => {
+        if (!artistModal) return;
+        artistModal.classList.remove("is-open");
+        artistModal.setAttribute("aria-hidden", "true");
+        document.documentElement.style.overflow = "";
+        lastFocus?.focus?.();
+      };
+
+      // スマホだけ、artist-row の「＋ボタン」タップで開く
+		document.addEventListener("click", (e) => {
+		if (!isMobile()) return;
+
+		const plus = e.target.closest(".artist-plus");
+		if (!plus) return;
+
+		const row = plus.closest(".artist-row");
+		if (!row) return;
+
+		openArtistModalFromRow(row);
+		});
+
+
+
+      // close（overlay/×）
+      document.addEventListener("click", (e) => {
+        if (e.target.closest("#artistModal [data-close='true']")) {
+          closeArtistModal();
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && artistModal?.classList.contains("is-open")) {
+          closeArtistModal();
+        }
+      });
+    } catch (err) {
+      console.error("[artist modal error]", err);
+    }
+
+    // =========================================================
+    // 6) Gallery Lightbox（スマホだけ：#gallery内のimgタップで開く）
+    //    + summary-galleryも開けるようにしてる（要らなければ外してOK）
+    // =========================================================
+    try {
+      const gmodal = document.getElementById("galleryModal");
+      const gimg = document.getElementById("galleryModalImg");
+      let lastFocus = null;
+
+      if (gmodal && gimg) {
+        const openGallery = (src, alt = "") => {
+          if (!src) return;
+          if (!isMobile()) return;
+
+          lastFocus = document.activeElement;
+          gimg.src = src;
+          gimg.alt = alt;
+
+          gmodal.classList.add("is-open");
+          gmodal.setAttribute("aria-hidden", "false");
+          document.documentElement.style.overflow = "hidden";
+          gmodal.querySelector(".gmodal-close")?.focus();
+        };
+
+        const closeGallery = () => {
+          gmodal.classList.remove("is-open");
+          gmodal.setAttribute("aria-hidden", "true");
+          document.documentElement.style.overflow = "";
+          gimg.removeAttribute("src");
+          lastFocus?.focus?.();
+        };
+
+        document.addEventListener("click", (e) => {
+          if (!isMobile()) return;
+
+          // #gallery 内の画像
+          const galImg = e.target.closest("#gallery img");
+          // summary内も開く（不要なら消してOK）
+          const sumImg = e.target.closest(".summary-gallery img");
+          const img = galImg || sumImg;
+
+          if (img) {
+            const full = img.getAttribute("data-full") || img.getAttribute("src");
+            openGallery(full, img.getAttribute("alt") || "");
+            return;
+          }
+
+          // close
+          if (e.target.closest("#galleryModal [data-close='true']")) {
+            closeGallery();
+          }
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && gmodal.classList.contains("is-open")) {
+            closeGallery();
+          }
+        });
+      }
+    } catch (err) {
+      console.error("[gallery modal error]", err);
+    }
+
+    // =========================================================
+    // 7) Shooting Star（ロード時に全体へばら撒く）
+    // =========================================================
+    try {
+      const layer = document.querySelector(".shooting-layer");
+      if (layer) {
+        const COUNT = 14;
+        const TOP_MIN = 5;
+        const TOP_MAX = 85;
+
+        for (let i = 0; i < COUNT; i++) {
+          const s = document.createElement("span");
+          s.className = "shooting-star";
+
+          const y = TOP_MIN + Math.random() * (TOP_MAX - TOP_MIN);
+          const delay = 0.1 + Math.random() * 1.2;
+          const dur = 0.9 + Math.random() * 0.7;
+          const rot = -18 + Math.random() * 12; // -18〜-6
+
+          s.style.setProperty("--y", `${y}%`);
+          s.style.setProperty("--x", `110%`);
+          s.style.setProperty("--delay", `${delay}s`);
+          s.style.setProperty("--dur", `${dur}s`);
+          s.style.setProperty("--rot", `${rot}deg`);
+
+          layer.appendChild(s);
+
+          // 終わったら消す（残したいなら remove を消す）
+          s.addEventListener("animationend", () => s.remove());
+        }
+
+        // レイヤーも片付ける（残したいなら消す）
+        setTimeout(() => {
+          if (layer.childElementCount === 0) layer.remove();
+        }, 4500);
+      }
+    } catch (err) {
+      console.error("[shooting star error]", err);
+    }
+  });
+})();
+
+document.addEventListener("click", (e) => {
+  if (!isMobile()) return;
+
+  const btn = e.target.closest(".artist-more");
+  if (!btn) return;
+
+  const row = btn.closest(".artist-row");
+  if (!row) return;
+
+  // 既存の openArtistModalFromRow(row) を呼ぶ
+  openArtistModalFromRow(row);
+});
+
+
+// DOMContentLoaded の中（最後らへんでOK）
+(() => {
+  const API_KEY = "YOUR_YOUTUBE_API_KEY";
+  const grid = document.getElementById("musicGrid");
+  if (!grid) return;
+
+  const playlistId = grid.dataset.playlist;
+  const maxResults = Number(grid.dataset.max || 6);
+
+  const esc = (s) => String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+  const renderCard = ({ videoId, title, thumb }) => {
+    const a = document.createElement("a");
+    a.className = "music-card";
+    a.href = `https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.innerHTML = `
+      <div class="music-thumb">
+        <img src="${esc(thumb)}" alt="${esc(title)}" loading="lazy">
+        <span class="music-play" aria-hidden="true">▶</span>
+      </div>
+      <p class="music-cap">${esc(title)}</p>
+    `;
+    return a;
+  };
+
+  const fetchPlaylist = async () => {
+    if (!playlistId || playlistId === "YOUR_PLAYLIST_ID") return;
+
+    const url = new URL("https://www.googleapis.com/youtube/v3/playlistItems");
+    url.searchParams.set("part", "snippet");
+    url.searchParams.set("playlistId", playlistId);
+    url.searchParams.set("maxResults", String(maxResults));
+    url.searchParams.set("key", API_KEY);
+
+    const res = await fetch(url.toString());
+    if (!res.ok) throw new Error("YouTube API error: " + res.status);
+
+    const data = await res.json();
+    const items = (data.items || [])
+      .map(it => {
+        const sn = it.snippet;
+        const vid = sn?.resourceId?.videoId;
+        const title = sn?.title || "";
+        const thumb =
+          sn?.thumbnails?.maxres?.url ||
+          sn?.thumbnails?.high?.url ||
+          sn?.thumbnails?.medium?.url ||
+          sn?.thumbnails?.default?.url ||
+          "";
+        if (!vid || !thumb) return null;
+        if (/private video|deleted video/i.test(title)) return null;
+        return { videoId: vid, title, thumb };
+      })
+      .filter(Boolean);
+
+    grid.innerHTML = "";
+    items.forEach(v => grid.appendChild(renderCard(v)));
+  };
+
+  fetchPlaylist().catch(console.error);
+})();
+
+
+</script>
+
+<script>
+(() => {
+  const items = document.querySelectorAll('#enjoy .enjoy-step');
+  if (!items.length) return;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in');
+        io.unobserve(e.target); // 1回だけ出す
+      }
+    });
+  }, {
+    root: null,
+    threshold: 0.15,
+    rootMargin: '0px 0px -10% 0px'
+  });
+
+  items.forEach(el => io.observe(el));
+})();
+</script>
 
 
 
