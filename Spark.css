@@ -29,14 +29,13 @@ img, svg{
 /* ===== nitiji：スマホ（デフォルト） ===== */
 /* ===== nitiji：相対値（スマホ〜PCまで滑らか） ===== */
 .nitiji{
-  margin-top: 350px;
   text-align: center;
 }
 
 /* スマホだけ上書き */
 @media (max-width: 600px){
   .nitiji{
-    margin-top: 250px; 
+    margin-top: -350px; 
   }
 }
 
@@ -60,7 +59,7 @@ img, svg{
 }
 
 .date-blue{
-  color: #fcf454;
+  color: yellow;
   font-weight: 950;
 }
 
@@ -121,13 +120,11 @@ body{
 }
 
 .section-title{
-  font-size: clamp(40px, 4.8vw, 56px); /* スマホ32〜PC56くらい */
+  font-size: clamp(32px, 4.8vw, 40px); 
   font-weight: 900;
-  letter-spacing: .14em;
   line-height: 1.1;
   margin: 0 0 18px;
   font-weight: 950;
-  letter-spacing: .10em;
   text-transform: uppercase;
   text-align: center;
   overflow: hidden;              /* はみ出し防止 */
@@ -135,10 +132,11 @@ body{
   position: relative;
 }
 
-.section-title span{
+.section-title .title-wrap > span{
   display: inline-block;
   padding-left: 14px;
 }
+
 
 .section-title::before{
   content:"";
@@ -150,6 +148,25 @@ body{
   background: rgba(255,255,255,.75);
   border-radius: 2px;
 }
+
+
+.section-title .under{
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.section-title .under::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 4px;
+  bottom: -0.10em;    /* 位置調整 */
+  background: currentColor;
+  opacity: .95;
+}
+
 
 
 /* JS有効時だけ、最初は隠す */
@@ -177,6 +194,9 @@ body{
   100% { opacity: 1; transform: translateX(0);     filter: blur(0); }
 }
 
+.section-title.no-upper{
+  text-transform: none !important;
+}
 /* =========================
    Section title: responsive
 ========================= */
@@ -192,7 +212,7 @@ body{
 /* 2) スマホ：折り返しOK + 左棒の扱い調整 */
 @media (max-width: 600px){
   .section-title{
-    font-size: 16px;          /* ここ好みで clamp にしてもOK */
+    font-size: 20px;          /* ここ好みで clamp にしてもOK */
     white-space: normal;      /* ← 重要：nowrap解除 */
     line-height: 1.2;
     padding-left: 10px;       /* 左棒分の逃げ（棒残す場合） */
@@ -220,7 +240,7 @@ body{
 /* 3) もっと小さい端末：さらに詰める */
 @media (max-width: 380px){
   .section-title{
-    font-size: 18px;
+    font-size: 20px;
     letter-spacing: .01em;
   }
 }
@@ -229,37 +249,7 @@ body{
 a{ color:inherit; text-decoration:none; }
 a:hover{ text-decoration:underline; }
 
-/* ===== 砂嵐 ===== */
-.noise{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  opacity: .12;
-  mix-blend-mode: overlay;
-  background-image:
-    repeating-linear-gradient(0deg,
-      rgba(255,255,255,.06) 0px,
-      rgba(255,255,255,.06) 1px,
-      rgba(0,0,0,0) 2px,
-      rgba(0,0,0,0) 4px
-    ),
-    repeating-linear-gradient(90deg,
-      rgba(255,255,255,.04) 0px,
-      rgba(255,255,255,.04) 1px,
-      rgba(0,0,0,0) 2px,
-      rgba(0,0,0,0) 6px
-    );
-  animation: noiseMove .12s steps(2) infinite;
-}
 
-@keyframes noiseMove{
-  0%   { transform: translate3d(0,0,0); }
-  25%  { transform: translate3d(-1%, 1%,0); }
-  50%  { transform: translate3d(1%, -1%,0); }
-  75%  { transform: translate3d(-1%, -1%,0); }
-  100% { transform: translate3d(1%, 1%,0); }
-}
 
 /* ===== HERO ===== */
 .hero-top{ padding: 25px 0 44px; }
@@ -270,11 +260,9 @@ a:hover{ text-decoration:underline; }
   margin-bottom: 150px;
   text-align:center;
 }
-@media (max-width: 820px){
-  .hero-inner{
-    margin-top: 600px;
-}
-}
+
+
+
 
 
 .hero-logo{
@@ -292,6 +280,18 @@ a:hover{ text-decoration:underline; }
     margin-top: 100px;
   }
 }
+/* 既存はそのままでOK */
+
+/* スマホだけ SNS_real を大きくする */
+@media (max-width: 820px){
+  .hero-logo--sns{
+    width: min(820px, 92%);   /* 外枠はそのままでもOK */
+    transform: scale(1.25);   /* ←ここを 1.15〜1.5で調整 */
+    transform-origin: center top;
+    margin: 10px auto -10px;  /* 拡大でズレる分を調整 */
+  }
+}
+
 
 .hero-logo2{
   width: min(820px, 30%);
@@ -377,6 +377,13 @@ a:hover{ text-decoration:underline; }
   align-items:center;
   justify-content:space-between;
   gap: 16px;
+}
+
+@media (max-width: 720px){
+  .header-inner{
+    height: 32px;
+    font-size: 8px;
+  }
 }
 
 /* mini brand */
@@ -503,16 +510,21 @@ a:hover{ text-decoration:underline; }
   transform: translateY(-7px) rotate(-45deg);
 }
 
+
 /* ===== Mobile ===== */
 @media (max-width: 980px){
   .nav{ display:none; }
-  .nav-toggle{ display:flex; }
+  .nav-toggle{ 
+    display:flex; 
+    height: 32px;
+    width: 32px;
+  }
   .hero-top{ padding: 48px 0 34px; }
 
   .overlay{
     display:block;
     position: fixed;
-    inset: 72px 0 0 0;
+    inset: var(--headerH) 0 0 0;  
     background: rgba(0,0,0,.55);
     opacity: 0;
     pointer-events: none;
@@ -527,9 +539,9 @@ a:hover{ text-decoration:underline; }
   .drawer{
     display:block;
     position: fixed;
-    top: 72px;
+    top: var(--headerH);          
     right: 0;
-    height: calc(100dvh - 72px);
+    height: calc(100dvh - var(--headerH));
     width: min(50vw, 320px);
     background: rgba(10,10,12,.92);
     border-left: 1px solid var(--line);
@@ -549,12 +561,12 @@ a:hover{ text-decoration:underline; }
     gap: 10px;
   }
   .drawer-nav a{
-    padding: 14px 12px;
+    padding: 4px 12px;
     border: 1px solid var(--line);
     border-radius: 12px;
     font-weight: 950;
     letter-spacing:.14em;
-    font-size: 13px;
+    font-size: 10px;
     color: var(--text);
     background: rgba(255,255,255,.06);
   }
@@ -564,6 +576,7 @@ a:hover{ text-decoration:underline; }
     border-color:#fff;
   }
 }
+
 
 /* 仮の本文見やすく */
 .dummy{
@@ -589,6 +602,11 @@ a:hover{ text-decoration:underline; }
   display:block;
 }
 
+@media screen {
+  .brand-logo{
+    height: 20px;
+  }
+}
 
 
 /* ===== MAIN: 独立した白い面 ===== */
@@ -667,7 +685,7 @@ a:hover{ text-decoration:underline; }
 
 @media (max-width: 720px){
   .lead{
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 
@@ -736,6 +754,41 @@ a:hover{ text-decoration:underline; }
   background: transparent;
 }
 
+/* 画像ギャラリー（2列） */
+.summary-gallery{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+  align-items: start;
+}
+
+/* 画像共通 */
+.summary-img{
+  width: 100%;
+  max-width: 420px;      /* 好きに調整 */
+  height: auto;
+  display: block;
+  border-radius: 12px;  /* 好み */
+}
+
+
+/* 奇数枚で最後の1枚が余る時も中央寄せ */
+.summary-gallery > .summary-img:last-child:nth-child(odd){
+  grid-column: 1 / -1;
+  justify-self: center;
+}
+
+/* スマホは1列 */
+@media (max-width: 640px){
+
+  .summary-img{
+    width: 100px;
+    display: block;
+  }
+
+}
+
 
 
 /* 文字を暗幕より前に */
@@ -752,25 +805,6 @@ a:hover{ text-decoration:underline; }
   color: rgba(255,255,255,.72);
 }
 
-/* 最初は閉じる */
-.summary-text{
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: max-height .45s ease, opacity .35s ease, transform .35s ease;
-}
-@media (max-width: 600px){
-  .summary-text{
-    font-size: 10px;
-  }
-}
-/* 開いた状態 */
-.summary-body.is-open .summary-text{
-  max-height: 2000px; /* 本文が長いので大きめに */
-  opacity: 1;
-  transform: translateY(0);
-}
 
 
 /* 見出し部分（クリック領域） */
@@ -888,7 +922,8 @@ a:hover{ text-decoration:underline; }
   margin-bottom: 2em;
 }
 
-.artist-2logo{
+
+.artist-logo2{
   width: 180px;        /* ← まずはここを触る */
   max-width: 100%;
   height: auto;
@@ -897,12 +932,85 @@ a:hover{ text-decoration:underline; }
   margin-bottom: 2em;
 }
 
+@media (max-width: 720px) {
+  .artist-logo{
+    justify-self: center;
+    width: 80px;
+  }
+  .artist-logo2{
+    justify-self: center;
+    width: 120px;
+  }
+}
+
 
 .artist-item{
   text-align: center;
 }
+/* スマホ用：写真の下にロゴ */
+.artist-logo-sp{
+  display: none; /* デフォルトは非表示（=PC） */
+}
+
+@media (max-width: 768px){
+  .artist-photo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; 
+    gap: 10px; /* 写真とロゴの間 */
+  }
+
+  .artist-logo-sp{
+  display: block;
+  width: min(200px, 64%);   /* ← ここで小さく（好みで 180〜220px） */
+  height: auto;
+  margin: 10px auto 0;      /* ← これが中央寄せの本体 */
+  justify-self: center;
+}
 
 
+}
+
+/* 右上の＋ボタン */
+.artist-plus{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 16px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255,255,255,.45);
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  color: #fff;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.artist-plus:hover{ opacity: .92; }
+.artist-plus:active{ transform: scale(.96); }
+
+/* スマホで少し大きくして押しやすく */
+@media (max-width: 768px){
+  .artist-plus{
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    top: 190px;
+    right: 10px;
+  }
+}
 
 /* 画像だけ“額縁っぽく”整える（背景は作らない） */
 .artist-img{
@@ -965,118 +1073,98 @@ a:hover{ text-decoration:underline; }
 
 
 /* ===== Artists layout ===== */
-.artists-wrap{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: start;
-}
-
-/* 左右それぞれ縦並び */
-.artists-col{
-  display: grid;
-  grid-template-rows: repeat(3, auto);
-  gap: 48px;
-}
-
-/* 画像 */
-.artist-img-item img{
-  width: 100%;
-  border-radius: 14px;
-  display: block;
-}
-
-/* 説明 */
-.artist-desc-item h3{
-  font-size: 18px;
-  letter-spacing: .08em;
-  margin-bottom: 10px;
-}
-
-.artist-desc-item p{
-  font-size: 14px;
-  line-height: 1.9;
-  opacity: .85;
-}
 
 .artists-list{
   display: grid;
   gap: 56px;
 }
 
-/* 1アーティスト = 1行 */
-.artist-photo{
-  width: 100%;
-  aspect-ratio: 4 / 3;      /* ← 好きな比率に調整 */
-  overflow: hidden;         /* ← はみ出しトリミング */
-  border-radius: 14px;
-}
-
+/* PC：左写真 / 右ロゴ+説明 */
 .artist-row{
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  align-items: center;
+  grid-template-columns: 420px 1fr;
+  gap: 28px;
+  align-items: start;
 }
 
-/* 写真 */
+/* 写真枠（比率固定 + トリミング） */
+.artist-photo{
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
 .artist-photo img{
   width: 100%;
-  border-radius: 14px;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  object-fit: cover;   
 }
 
-/* テキスト */
-.artist-name{
-  font-size: 18px;
-  letter-spacing: .08em;
-  margin-bottom: 12px;
+/* ロゴ */
+.artist-text .artist-logo,
+.artist-text .artist-2logo{
+  display: block;
+  max-width: 320px;
+  height: auto;
+  margin: 0 0 12px;
 }
 
+
+
+/* 説明（共通） */
 .artist-desc{
   font-size: 14px;
   line-height: 1.9;
   opacity: .85;
 }
 
+/* PC：短文/MOREは不要、長文 */
+.artist-desc--teaser{ display:none; }
+.artist-more{ display:none; }
+.artist-desc--full{ display:block; }
 
-
-/* スマホ: 1×4 */
+/* ===== SP（スマホ）：写真 → ロゴ → teaser → MORE ===== */
 @media (max-width: 768px){
+  .artists-list{ gap: 24px; }
 
-  /* まず “3列” を完全に潰す */
-  .artists-list,
-  .artists-wrap,
-  .artists-grid{
-    display: block !important;      /* grid/flexを無効化して縦積みに */
-  }
-
-  /* 1つずつ縦に並べる */
   .artist-row{
-    display: block !important;
-    width: 100%;
-    margin: 0 0 16px;               /* 各項目の間隔 */
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 
-  /* 写真は最大幅 */
+  /* スマホ正方形にしたい場合 */
   .artist-photo{
-    width: 100%;
-    aspect-ratio: 1 / 1;            /* 正方形ならこれ */
-    overflow: hidden;
+    aspect-ratio: 1 / 1;
     border-radius: 14px;
   }
 
-  .artist-photo img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  .artist-text{
+    display: grid;
+    gap: 10px;
   }
 
-  /* 説明文を消すなら */
-  .artist-text{
-    display: none !important;
+  .artist-desc--full{ display:none; }
+  .artist-desc--teaser{
+    display:block;
+    margin: 0;
+    line-height: 1.75;
+    opacity: .9;
+  }
+
+  .artist-more{
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: rgba(0,0,0,.25);
+    color: inherit;
+    letter-spacing: .12em;
+    font-weight: 900;
   }
 }
 
@@ -1213,7 +1301,14 @@ a:hover{ text-decoration:underline; }
   background: rgba(255,255,255,.08);
 }
 .loc-link:hover{ text-decoration:none; opacity:.9; }
-
+@media (max-width: 720px){
+  .loc-meta{
+    font-size: 16px;
+  }
+  .loc-link{
+    width: 600px;
+  }
+}
 /* もし lead / muted がまだ無ければ */
 .muted{ color: var(--muted); }
 
@@ -1335,7 +1430,17 @@ a:hover{ text-decoration:underline; }
   .ticket-prices{
     grid-template-columns: 1fr;
   }
-  .price-value{ font-size: 16px; }
+  .price-value{ font-size: 12px; }
+  .pripri{
+    font-size: 10px;
+  }
+  .sale-link-img{
+  display: block;
+  height: 80px;     /* ボタン高さで揃える */
+  width: auto;
+  object-fit: contain;
+}
+
 }
 
 /* SNS */
@@ -1827,7 +1932,7 @@ a:hover{ text-decoration:underline; }
 
 /* news内のリンクに🔗を付ける */
 #news .news-excerpt a::before{
-  content: " 🔗";
+  content: " 📍";
   display: inline-block;
   margin-left: .25em;
   opacity: .85;
@@ -1911,6 +2016,64 @@ a:hover{ text-decoration:underline; }
   background: rgba(255,255,255,.08);
   transform: translateY(-1px);
 }
+/* =========================
+   NEWS – smartphone: app-like (NO HTML change)
+   ========================= */
+@media (max-width: 768px){
+
+  /* 既存：中央寄せをスマホでは左寄せに（レイアウト自体はそのまま） */
+  #news .news-list{
+    text-align: left;
+    width: min(920px, 100%); /* 今の幅ルールを尊重 */
+  }
+
+  /* 出典（news-title）を “見出しっぽく” 小さめに */
+  #news .news-title{
+    margin: 0 0 6px;
+    font-size: 13px;
+    font-weight: 950;
+    letter-spacing: .10em;
+    text-transform: none;          /* SPICE / avex EB とかは自然表記 */
+    opacity: .92;
+
+  
+  }
+
+  /* 本文ブロックの余白を詰める */
+  #news .news-excerpt{
+    margin: 0;                     /* いま 0 auto 14px なのでスマホは詰める */
+    max-width: none;
+    line-height: 1.65;
+    letter-spacing: .02em;
+    content: " 📍";
+  }
+
+  /* 本文（a）を “2〜3行で … ” にする */
+  #news .news-excerpt a{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;         /* 2行にしたければ 2 */
+    font-size: 10px;
+    
+
+
+
+
+
+
+
+
+    /* 既存で a の装飾を消してるならそのままでOK。
+       下線が欲しいなら下の1行を有効化 */
+    /* text-decoration: underline; */
+    text-underline-offset: 3px;
+
+    /* クリックできる感：タップ範囲少し広げる */
+    padding: 2px 0;
+  }
+
+}
+
 
 
 .site-footer{
@@ -1926,3 +2089,483 @@ a:hover{ text-decoration:underline; }
   letter-spacing: .18em;
   text-transform: uppercase; /* いらなければ消してOK */
 }
+
+/* PC: 右端に貼り付け（縦） */
+.ticket-float{
+  position: fixed;
+  font-size: small;
+  z-index: 300;
+  right: 0;
+  top: 80%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+/* ボタン本体（PC） */
+.ticket-float__btn{
+  display: grid;
+  place-items: center;
+
+  width: 56px;          /* ←縦書きなので幅が先 */
+  height: 200px;        /* ←高さ */
+  padding: 12px 10px;
+
+  border-radius: 14px 0 0 14px; /* 右端にくっつく */
+  border: 1px solid rgba(255,255,255,.25);
+  border-right: 0;
+  background: rgba(10,10,12,.70);
+  backdrop-filter: blur(10px);
+
+  color: #fff;
+  font-weight: 950;
+
+  /* ✅ 縦書き */
+  writing-mode: vertical-rl;
+  text-orientation: mixed; /* 日本語は立つ / 英数は横向きになりがち */
+}
+
+.ticket-float__btn:hover{
+  transform: translateX(-2px);
+  text-decoration: none;
+  opacity: .95;
+}
+
+/* SP: 下固定（角丸なし・横書きに戻す） */
+@media (max-width: 768px){
+  .ticket-float{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    transform: none;
+    gap: 0;
+    align-items: stretch;
+  }
+
+  .ticket-float__btn{
+    width: 100%;
+    height: 56px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-top: 1px solid rgba(255,255,255,.18);
+    box-shadow: none;
+
+    /* ✅ スマホは横書き */
+    writing-mode: horizontal-tb;
+  }
+
+  body{
+    padding-bottom: 60px;
+  }
+}
+
+/* ===== TIMETABLE ===== */
+.timetable-card{
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 18px 18px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(10,10,12,.55);
+  backdrop-filter: blur(10px);
+}
+
+.tt{
+  margin: 0;
+  padding: 0;
+}
+
+.tt-row{
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 6px;
+  border-top: 1px solid rgba(255,255,255,.14);
+}
+.tt-row:first-child{ border-top: 0; }
+
+.tt-time{
+  margin: 0;
+  font-weight: 950;
+  letter-spacing: .14em;
+  white-space: nowrap;
+  opacity: .95;
+}
+
+.tt-item{
+  margin: 0;
+  font-weight: 850;
+  letter-spacing: .06em;
+  opacity: .92;
+}
+
+.tt-note{
+  margin: 14px 0 0;
+  font-size: 12px;
+  letter-spacing: .10em;
+  opacity: .72;
+}
+
+/* スマホは詰める */
+@media (max-width: 600px){
+  .timetable-card{
+    border-radius: 0;                 /* ←スマホは丸みいらない流れなら */
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .tt-row{
+    grid-template-columns: 86px 1fr;
+    gap: 10px;
+    padding: 12px 4px;
+  }
+
+  .tt-time{ font-size: 12px; }
+  .tt-item{ font-size: 12px; }
+}
+/* =========================
+   HOW TO ENJOY (enjoy only)
+   - PC/SP: 2 columns
+   - Even rows: reversed (keeps your original)
+   - Star image
+   - Slide-in animation (odd: left, even: right)
+========================= */
+
+#enjoy .enjoy-steps{
+  display: grid;
+  gap: 22px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+#enjoy .enjoy-step{
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 18px;
+  align-items: center;
+
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  backdrop-filter: none;
+  overflow: visible;
+
+  margin-top: 60px;
+
+  /* アニメ初期状態（JSでis-inを付ける） */
+  opacity: 0;
+  transform: translateX(-28px);
+  filter: blur(6px);
+  transition:
+    opacity .7s cubic-bezier(.2,.9,.2,1),
+    transform .7s cubic-bezier(.2,.9,.2,1),
+    filter .7s cubic-bezier(.2,.9,.2,1);
+  will-change: transform, opacity, filter;
+}
+
+/* 偶数は右から出てくる */
+#enjoy .enjoy-step:nth-child(even){
+  grid-template-columns: 1fr 240px; /* 左=文章 右=画像 */
+  transform: translateX(28px);      /* 初期は右に */
+}
+
+/* 偶数の並び替え */
+#enjoy .enjoy-step:nth-child(even) .enjoy-media{ order: 2; }
+#enjoy .enjoy-step:nth-child(even) .enjoy-text{ order: 1; }
+
+/* 表示状態 */
+#enjoy .enjoy-step.is-in{
+  opacity: 1;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* ===== Star media ===== */
+/* 星形（太め） */
+#enjoy .enjoy-media{
+  aspect-ratio: 1 / 1; /* 星は正方形の方が安定 */
+  overflow: hidden;
+  border-radius: 0;
+  -webkit-clip-path: polygon(
+    50% 3%,
+    64% 34%,
+    98% 38%,
+    72% 60%,
+    82% 96%,
+    50% 76%,
+    18% 96%,
+    28% 60%,
+    2% 38%,
+    36% 34%
+  );
+  clip-path: polygon(
+    50% 3%,
+    64% 34%,
+    98% 38%,
+    72% 60%,
+    82% 96%,
+    50% 76%,
+    18% 96%,
+    28% 60%,
+    2% 38%,
+    36% 34%
+  );
+  filter: drop-shadow(0 10px 26px rgba(0,0,0,.45));
+}
+#enjoy .enjoy-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+
+#enjoy .enjoy-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== text ===== */
+#enjoy .enjoy-text{
+  padding: 0;
+  text-align: left;
+  min-width: 0;
+}
+
+#enjoy .enjoy-time{
+  margin: 0 0 10px;
+  font-weight: 950;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-break: strict;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+#enjoy .enjoy-desc{
+  margin: 0;
+  line-height: 1.95;
+  letter-spacing: .04em;
+  opacity: .92;
+  font-weight: 800;
+  min-width: 0;
+}
+
+/* ===== Tablet ===== */
+@media (max-width: 980px){
+  #enjoy .enjoy-steps{ gap: 18px; }
+
+  #enjoy .enjoy-step{
+    grid-template-columns: 190px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  #enjoy .enjoy-step:nth-child(even){
+    grid-template-columns: 1fr 190px;
+  }
+
+  #enjoy .enjoy-time{
+    font-size: 13px;
+    letter-spacing: .14em;
+  }
+
+  #enjoy .enjoy-desc{
+    font-size: 12px;
+    line-height: 1.85;
+  }
+}
+
+/* ===== Small phones ===== */
+@media (max-width: 520px){
+  #enjoy .enjoy-step{
+    grid-template-columns: 130px 1fr;
+    gap: 12px;
+  }
+  #enjoy .enjoy-step:nth-child(even){
+    grid-template-columns: 1fr 130px;
+  }
+  #enjoy .enjoy-desc{ font-size: 11px; }
+}
+
+
+.music-section{
+  margin-top: 26px;
+}
+
+.music-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.music-card{
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform .15s ease, border-color .15s ease;
+}
+
+.music-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.28);
+}
+
+.music-thumb{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+
+.music-thumb img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.music-play{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  opacity: .9;
+  text-shadow: 0 8px 28px rgba(0,0,0,.65);
+}
+
+.music-cap{
+  margin: 0;
+  padding: 10px 12px 12px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  line-height: 1.35;
+  font-size: 14px;
+  opacity: .95;
+}
+
+/* ===== YouTube Embed Grid ===== */
+.music-section{
+  margin-top: 26px;
+}
+
+.yt-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.yt-item{
+  min-width: 0;
+}
+
+.yt-embed{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+}
+
+.yt-embed iframe{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.yt-cap{
+  margin: 0;
+  padding: 10px 12px 12px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  line-height: 1.35;
+  font-size: 14px;
+  opacity: .95;
+}
+
+/* スマホも2列で行きたい（崩れにくくする） */
+@media (max-width: 480px){
+  .yt-grid{ 
+    gap: 12px;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .yt-embed{ border-radius: 10px; }
+  .yt-cap{ font-size: 12px; padding: 8px 10px 10px; }
+}
+
+/* もし「超小さい端末だけ1列」にしたいならこれをON
+@media (max-width: 360px){
+  .yt-grid{ grid-template-columns: 1fr; }
+}
+*/
+
+
+
+@media (max-width: 768px){
+  .music-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* ←2列 */
+    gap: 12px;                                       /* ←スマホは少し詰める */
+  }
+
+  .music-card{ border-radius: 12px; }                /* 0だと角が死ぬので戻す */
+  .music-cap{ font-size: 12px; padding: 8px 10px 10px; }
+  .music-play{ font-size: 38px; }
+}
+
+/* 改行位置を固定する */
+.fixed-lines .line{
+  display:block;
+  white-space:nowrap;   /* ← これで“勝手な折り返し”を禁止 */
+}
+
+/* 空行の高さ（段落間） */
+.fixed-lines .blank{
+  line-height: 1.6;
+}
+
+/* スマホは文字サイズを少し下げて、はみ出しを起こしにくくする */
+@media (max-width: 480px){
+  .concept-text{
+    font-size: 12px;   /* 好みで 13〜15 くらい */
+  }
+}
+.concept-fit{
+  display: flex;
+  justify-content: center;
+}
+
+.concept-fit__inner{
+  transform-origin: top center;
+  will-change: transform;
+}
+
+/* このリンクだけ下線を出す（a共通の下線OFFを上書き） */
+a.link-underline,
+a.link-underline:visited{
+  text-decoration: underline;
+  text-underline-offset: .18em;   /* 下線の位置ちょい下げ */
+  text-decoration-thickness: .08em; /* 太さ */
+  color: inherit;                 /* 色はサイトに馴染ませる */
+}
+
+a.link-underline:hover{
+  text-decoration-thickness: .12em; /* hoverでちょい強く */
+}
+
+
