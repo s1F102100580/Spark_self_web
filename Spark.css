@@ -683,10 +683,16 @@ a:hover{ text-decoration:underline; }
   line-height: 1.9;
 }
 
-@media (max-width: 720px){
+
+
+@media (max-width: 980px){
   .lead{
-    font-size: 12px;
+    font-size: 10px;
   }
+  .about-small{
+  font-size: 9px;   /* 好みで 0.75〜0.9 */
+}
+
 }
 
 
@@ -766,9 +772,10 @@ a:hover{ text-decoration:underline; }
 /* 画像共通 */
 .summary-img{
   width: 100%;
-  max-width: 420px;      /* 好きに調整 */
+  max-width: 300px;      /* 好きに調整 */
   height: auto;
-  display: block;
+  max-height: 150px;
+  justify-self: center;
   border-radius: 12px;  /* 好み */
 }
 
@@ -2226,7 +2233,7 @@ a:hover{ text-decoration:underline; }
   }
 
   .tt-time{ font-size: 12px; }
-  .tt-item{ font-size: 12px; }
+  .tt-item{ font-size: 10px; }
 }
 /* =========================
    HOW TO ENJOY (enjoy only)
@@ -2285,38 +2292,22 @@ a:hover{ text-decoration:underline; }
   filter: blur(0);
 }
 
-/* ===== Star media ===== */
-/* 星形（太め） */
+/* 丸窓に変更 */
 #enjoy .enjoy-media{
-  aspect-ratio: 1 / 1; /* 星は正方形の方が安定 */
+  width: 100%;
+  aspect-ratio: 1 / 1;   /* 丸にするなら正方形が安定 */
   overflow: hidden;
-  border-radius: 0;
-  -webkit-clip-path: polygon(
-    50% 3%,
-    64% 34%,
-    98% 38%,
-    72% 60%,
-    82% 96%,
-    50% 76%,
-    18% 96%,
-    28% 60%,
-    2% 38%,
-    36% 34%
-  );
-  clip-path: polygon(
-    50% 3%,
-    64% 34%,
-    98% 38%,
-    72% 60%,
-    82% 96%,
-    50% 76%,
-    18% 96%,
-    28% 60%,
-    2% 38%,
-    36% 34%
-  );
-  filter: drop-shadow(0 10px 26px rgba(0,0,0,.45));
+  border-radius: 50%;   /* ←これで円 */
 }
+
+/* 画像を円にフィット */
+#enjoy .enjoy-media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 #enjoy .enjoy-media img{
   width: 100%;
   height: 100%;
@@ -2375,12 +2366,12 @@ a:hover{ text-decoration:underline; }
   }
 
   #enjoy .enjoy-time{
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: .14em;
   }
 
   #enjoy .enjoy-desc{
-    font-size: 12px;
+    font-size: 8px;
     line-height: 1.85;
   }
 }
