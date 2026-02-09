@@ -979,31 +979,39 @@ a:hover{ text-decoration:underline; }
 
 }
 
-/* 右上の＋ボタン */
+/* まずはデフォ（=PC含む）では非表示 */
 .artist-plus{
-  position: absolute;
-  top: 12px;
-  right: 12px;
-
-  width: 38px;
-  height: 38px;
-  border-radius: 16px;
-
-  display: grid;
-  place-items: center;
-
-  border: 1px solid rgba(255,255,255,.45);
-  background: rgba(0,0,0,.35);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  color: #fff;
-  font-size: 22px;
-  font-weight: 900;
-  line-height: 1;
-
-  cursor: pointer;
+  display: none;
 }
+
+/* スマホだけ表示 */
+@media (max-width: 768px){
+  .artist-plus{
+    display: grid; /* もともとの place-items が効く */
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+
+    place-items: center;
+
+    border: 1px solid rgba(255,255,255,.45);
+    background: rgba(0,0,0,.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    color: #fff;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1;
+
+    cursor: pointer;
+  }
+}
+
 
 .artist-plus:hover{ opacity: .92; }
 .artist-plus:active{ transform: scale(.96); }
@@ -1086,21 +1094,57 @@ a:hover{ text-decoration:underline; }
   gap: 56px;
 }
 
-/* PC：左写真 / 右ロゴ+説明 */
 .artist-row{
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 28px;
-  align-items: start;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 18px;
+    align-items: stretch;  /* ←これが超重要：左右を同じ高さに引き伸ばす */
+  }
+
+  /* =========================
+   Artists（PC）：左右の高さを強制的に揃える
+   ========================= */
+@media (min-width: 769px){
+
+  .artist-row{
+    grid-template-columns: 1fr 1.05fr;
+    align-items: stretch;
+  }
+
+  /* 行の高さを決める（ここが“揃う”ポイント） */
+  .artist-row{
+    min-height: 360px;     /* 好みで 320〜420 */
+  }
+
+  .artist-photo{
+    height: 100%;
+  }
+
+  .artist-photo > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+  }
+
+  /* テキスト側も高さ100%にして中央寄せ */
+  .artist-text{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
 }
 
+
 /* 写真枠（比率固定 + トリミング） */
-.artist-photo{
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 14px;
-}
+  .artist-photo{
+    position: relative;
+    height: 100%;
+  }
+
 
 .artist-photo img{
   width: 100%;
@@ -1108,6 +1152,15 @@ a:hover{ text-decoration:underline; }
   object-fit: cover;
   display: block;
 }
+
+.artist-photo > img{
+    width: 100%;
+    height: 100%;
+    min-height: 320px;     /* ←ここで最低高さを揃える（好みで 280〜380） */
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+  }
 
 /* ロゴ */
 .artist-text .artist-logo,
@@ -1118,7 +1171,13 @@ a:hover{ text-decoration:underline; }
   margin: 0 0 12px;
 }
 
-
+.artist-text{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* ←中央寄せが嫌なら flex-start に */
+    min-width: 0;
+  }
 
 /* 説明（共通） */
 .artist-desc{
@@ -1134,46 +1193,40 @@ a:hover{ text-decoration:underline; }
 
 /* ===== SP（スマホ）：写真 → ロゴ → teaser → MORE ===== */
 @media (max-width: 768px){
-  .artists-list{ gap: 24px; }
-
   .artist-row{
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  /* スマホ正方形にしたい場合 */
+  /* ★スマホ：写真を正方形に固定 + サイズ上限 */
   .artist-photo{
-    aspect-ratio: 1 / 1;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;                 /* 正方形 */
+    max-width: 520px;                    /* でかくなりすぎ防止（好みで 420〜560） */
+    margin: 0 auto;                      /* 中央寄せ */
     border-radius: 14px;
+    overflow: hidden;                    /* はみ出しカット */
   }
 
+  .artist-photo > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;                   /* 正方形にトリミング */
+    display: block;
+  }
+
+  /* ★PCの高さ揃え用をスマホでは無効化 */
+  .artist-photo > img{
+    min-height: 0;
+  }
   .artist-text{
-    display: grid;
-    gap: 10px;
+    height: auto;
+    display: block;                      /* PCのflex中央寄せを解除したいなら */
   }
-
-  .artist-desc--full{ display:none; }
-  .artist-desc--teaser{
-    display:block;
-    margin: 0;
-    line-height: 1.75;
-    opacity: .9;
-  }
-
-  .artist-more{
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
-    border: 1px solid rgba(255,255,255,.35);
-    border-radius: 999px;
-    padding: 10px 16px;
-    background: rgba(0,0,0,.25);
-    color: inherit;
-    letter-spacing: .12em;
-    font-weight: 900;
-  }
+  .artist-desc--full{ display: none !important; }
 }
+
 
 
 
@@ -1982,6 +2035,10 @@ a:hover{ text-decoration:underline; }
   border-bottom: 1px solid rgba(255,255,255,.18);
 }
 
+.news-item.sml{
+  font-size: 10px;
+}
+
 .news-title{
   margin: 0 0 10px;
   font-weight: 950;
@@ -2295,10 +2352,14 @@ a:hover{ text-decoration:underline; }
 /* 丸窓に変更 */
 #enjoy .enjoy-media{
   width: 100%;
-  aspect-ratio: 1 / 1;   /* 丸にするなら正方形が安定 */
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 50%;   /* ←これで円 */
+  border-radius: 50%;
+
+  border: 2px solid rgba(255,255,255,.9); /* ←白枠 */
+  box-sizing: border-box;                   /* ←枠ぶんで崩れない */
 }
+
 
 /* 画像を円にフィット */
 #enjoy .enjoy-media img{
