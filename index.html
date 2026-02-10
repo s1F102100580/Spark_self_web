@@ -664,6 +664,8 @@
 
 	</div>
 
+
+
 <section class="section" id="qbox">
   <h2 class="section-title">QUESTION BOX</h2>
 
@@ -690,88 +692,158 @@
       <div class="qbox-list"></div>
     </div>
   </div>
-</section>
 
-<script>
-(() => {
-  function esc(s){
-    return String(s).replace(/[&<>"']/g, (m) => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    }[m]));
-  }
+  <script>
+  (() => {
+    // =========================
+    // storage: 自分の投稿の削除キーを覚える
+    // =========================
+    const STORE_KEY = "qbox:delkeys";
 
-  async function loadAnswers(box){
-    const form = box.querySelector(".qbox-form");
-    const msg  = box.querySelector(".qbox-msg");
-    const list = box.querySelector(".qbox-list");
-    const promptId = form.querySelector('[name="promptId"]').value;
+    const getMap = () => {
+      try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); }
+      catch { return {}; }
+    };
+    const setMap = (m) => localStorage.setItem(STORE_KEY, JSON.stringify(m));
+    const getDeleteKey = (id) => (getMap()[id] || "");
+    const storeDeleteKey = (id, deleteKey) => {
+      const m = getMap();
+      m[id] = deleteKey;
+      setMap(m);
+    };
+    const removeDeleteKey = (id) => {
+      const m = getMap();
+      delete m[id];
+      setMap(m);
+    };
 
-    try{
-      const r = await fetch(`/api/qbox?promptId=${encodeURIComponent(promptId)}`, { cache: "no-store" });
-      const data = await r.json();
-      if(!data.ok) throw new Error(data.error || "load failed");
-
-      const items = data.items || [];
-      list.innerHTML = items.map(it => `
-        <article class="qbox-item">
-          <div class="qbox-meta">
-            <span class="qbox-name">${esc(it.name)}</span>
-            <span class="qbox-time">${new Date(it.createdAt).toLocaleString()}</span>
-          </div>
-
-          <p class="qbox-songline">🎵 ${esc(it.song || "")}</p>
-          <p class="qbox-text">「${esc(it.lyric || "").replace(/\n/g,"<br>")}」</p>
-        </article>
-      `).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
-    } catch(e){
-      msg.textContent = "読み込み失敗：" + e.message;
+    // =========================
+    // util
+    // =========================
+    function esc(s){
+      return String(s).replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
     }
-  }
 
-  document.querySelectorAll(".qbox").forEach((box) => {
-    const form = box.querySelector(".qbox-form");
-    const msg  = box.querySelector(".qbox-msg");
-    const btn  = box.querySelector(".qbox-submit");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      msg.textContent = "";
-      btn.disabled = true;
-
-      const fd = new FormData(form);
-      const payload = {
-        promptId: fd.get("promptId"),
-        name: fd.get("name"),
-        song: fd.get("song"),
-        lyric: fd.get("lyric"),
-      };
+    async function loadAnswers(box){
+      const form = box.querySelector(".qbox-form");
+      const msg  = box.querySelector(".qbox-msg");
+      const list = box.querySelector(".qbox-list");
+      const promptId = form.querySelector('[name="promptId"]').value;
 
       try{
-        const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        const r = await fetch(`/api/qbox?promptId=${encodeURIComponent(promptId)}`, { cache: "no-store" });
         const data = await r.json();
-        if(!data.ok) throw new Error(data.error || "post failed");
+        if(!data.ok) throw new Error(data.error || "load failed");
 
-        form.reset();
-        form.querySelector('[name="promptId"]').value = payload.promptId;
-        msg.textContent = "送信しました！";
-        await loadAnswers(box);
-      }catch(err){
-        msg.textContent = "送信に失敗：" + err.message;
-      }finally{
-        btn.disabled = false;
+        const items = data.items || [];
+
+        list.innerHTML = items.map(it => {
+          // 旧形式(answer)が混ざってても落ちないように保険
+          const song = it.song || "";
+          const lyric = it.lyric || it.answer || "";
+          const canDelete = !!getDeleteKey(it.id);
+
+          return `
+            <article class="qbox-item">
+              <div class="qbox-meta">
+                <span class="qbox-name">${esc(it.name || "匿名")}</span>
+                <span class="qbox-time">${new Date(it.createdAt).toLocaleString()}</span>
+              </div>
+
+              <p class="qbox-songline">🎵 ${esc(song)}</p>
+              <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
+
+              ${canDelete ? `<button class="qbox-del" type="button" data-id="${esc(it.id)}">削除</button>` : ""}
+            </article>
+          `;
+        }).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+      } catch(e){
+        msg.textContent = "読み込み失敗：" + e.message;
       }
+    }
+
+    // =========================
+    // init
+    // =========================
+    document.querySelectorAll("#qbox .qbox").forEach((box) => {
+      const form = box.querySelector(".qbox-form");
+      const msg  = box.querySelector(".qbox-msg");
+      const btn  = box.querySelector(".qbox-submit");
+
+      // 投稿
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        msg.textContent = "";
+        btn.disabled = true;
+
+        const fd = new FormData(form);
+        const payload = {
+          promptId: fd.get("promptId"),
+          name: fd.get("name"),
+          song: fd.get("song"),
+          lyric: fd.get("lyric"),
+        };
+
+        try{
+          const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const data = await r.json();
+          if(!data.ok) throw new Error(data.error || "post failed");
+
+          // ★deleteKeyを保存（APIが item.deleteKey を返す前提）
+          if (data.item?.id && data.item?.deleteKey) {
+            storeDeleteKey(data.item.id, data.item.deleteKey);
+          }
+
+          form.reset();
+          form.querySelector('[name="promptId"]').value = payload.promptId;
+          msg.textContent = "送信しました！";
+          await loadAnswers(box);
+        }catch(err){
+          msg.textContent = "送信に失敗：" + err.message;
+        }finally{
+          btn.disabled = false;
+        }
+      });
+
+      // 削除（自分の投稿だけボタンが出る）
+      box.addEventListener("click", async (e) => {
+        const b = e.target.closest(".qbox-del");
+        if(!b) return;
+
+        const id = b.dataset.id;
+        const deleteKey = getDeleteKey(id);
+        if(!deleteKey) return;
+
+        if(!confirm("この投稿を削除しますか？")) return;
+
+        try{
+          const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(form.querySelector('[name="promptId"]').value)}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ deleteKey }),
+          });
+          const data = await r.json();
+          if(!data.ok) throw new Error(data.error || "delete failed");
+
+          removeDeleteKey(id);
+          await loadAnswers(box);
+        }catch(err){
+          alert("削除に失敗：" + err.message);
+        }
+      });
+
+      // 初期ロード
+      loadAnswers(box);
     });
-
-    loadAnswers(box);
-  });
-})();
-</script>
-
-
+  })();
+  </script>
+</section>
 
 
 
