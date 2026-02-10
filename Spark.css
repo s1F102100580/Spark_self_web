@@ -2760,3 +2760,32 @@ a.link-underline:hover{
   opacity: .75;
   font-size: 13px;
 }
+
+/* =========================
+   QBOX: PC幅を絞って中央寄せ
+   ========================= */
+
+/* 全体を中央寄せ＆最大幅を制限 */
+#qbox{
+  /* 画面端に張り付かないように */
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+#qbox .qbox{
+  /* ここで幅制限 */
+  max-width: 720px;          /* ←好みで 640〜820 くらい */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* PCだけさらに余白を増やしたい場合 */
+@media (min-width: 980px){
+  #qbox{
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  #qbox .qbox{
+    max-width: 760px;        /* PCだけ少し広げるなら */
+  }
+}
