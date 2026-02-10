@@ -2621,15 +2621,142 @@ a.link-underline:hover{
 }
 
 
-.qbox-form { display:grid; gap:10px; max-width:720px; margin: 0 auto; }
-.qbox-name, .qbox-answer { width:100%; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.25); color:#fff; }
-.qbox-answer { min-height: 120px; resize: vertical; }
-.qbox-submit { padding:12px 16px; border-radius:999px; border:1px solid rgba(255,255,255,.35); background: rgba(0,0,0,.35); color:#fff; font-weight:900; letter-spacing:.08em; cursor:pointer; }
-.qbox-submit:disabled { opacity:.6; cursor:not-allowed; }
-.qbox-msg { opacity:.9; margin:0; min-height: 1.2em; }
+/* =========================
+   QUESTION BOX (song + lyric)
+   ========================= */
 
-.qbox-list-wrap { max-width: 820px; margin: 26px auto 0; }
-.qbox-item { border:1px solid rgba(255,255,255,.18); border-radius:14px; padding:12px 14px; margin: 10px 0; background: rgba(0,0,0,.18); }
-.qbox-meta { display:flex; justify-content:space-between; gap:12px; opacity:.85; font-size: 12px; }
-.qbox-text { margin: 10px 0 0; line-height: 1.8; }
-.qbox-empty { opacity:.8; }
+/* ブロック間の余白 */
+.qbox{
+  margin-top: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+/* フォーム全体 */
+.qbox-form{
+  display: grid;
+  gap: 10px;
+}
+
+/* 入力（名前・曲名・歌詞） */
+.qbox-name,
+.qbox-song,
+.qbox-answer{
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.22);
+  color: #fff;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+
+  /* ★長い文字対策（入力欄でも折返し/はみ出し防止） */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* 曲名inputは1行でOK（長いときは折り返しではなくスクロール/省略にしたいなら後述） */
+.qbox-song{
+  white-space: normal; /* ←どこかでnowrapされてるのを潰す */
+}
+
+/* 歌詞textarea */
+.qbox-answer{
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* 送信ボタン */
+.qbox-submit{
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+.qbox-submit:disabled{
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* メッセージ */
+.qbox-msg{
+  margin: 0;
+  font-size: 13px;
+  opacity: .9;
+}
+
+/* 一覧エリア */
+.qbox-list-wrap{
+  display: grid;
+  gap: 10px;
+}
+
+.qbox-list{
+  display: grid;
+  gap: 12px;
+}
+
+/* 投稿カード */
+.qbox-item{
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  border-radius: 16px;
+  padding: 12px 14px;
+}
+
+/* 上のメタ情報 */
+.qbox-meta{
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.qbox-name{
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+
+.qbox-time{
+  font-size: 12px;
+  opacity: .75;
+}
+
+/* ★曲名表示：ここが「かかってない」対策の本命 */
+.qbox-songline{
+  margin: 0 0 6px;
+  font-weight: 900;
+  letter-spacing: .04em;
+  line-height: 1.5;
+
+  /* 折り返し強制（英数字/記号で長くても落ちない） */
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* 歌詞表示 */
+.qbox-text{
+  margin: 0;
+  line-height: 1.8;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* 空表示 */
+.qbox-empty{
+  margin: 0;
+  opacity: .75;
+  font-size: 13px;
+}
