@@ -700,6 +700,17 @@
   </div>
 
   <script>
+	const ADMIN_STORE = "qbox:adminToken";
+const getAdminToken = () => sessionStorage.getItem(ADMIN_STORE) || "";
+const setAdminToken = (t) => sessionStorage.setItem(ADMIN_STORE, String(t || ""));
+const clearAdminToken = () => sessionStorage.removeItem(ADMIN_STORE);
+
+// URLに #admin が付いてたらログイン（例: https://.../#admin）
+if (location.hash.includes("admin")) {
+  const t = prompt("管理者トークンを入力");
+  if (t) setAdminToken(t.trim());
+}
+
   (() => {
     // =========================
     // storage: 自分の投稿の削除キーを覚える
@@ -839,6 +850,8 @@
         }
       });
 
+	  
+
       // 編集・削除（イベント委任）
       box.addEventListener("click", async (e) => {
         const promptId = form.querySelector('[name="promptId"]').value;
@@ -881,6 +894,33 @@
           }
           return;
         }
+
+		// ---- 管理者削除 ----
+const adminDelBtn = e.target.closest(".qbox-admin-del");
+if (adminDelBtn) {
+  const id = adminDelBtn.dataset.id;
+  const token = getAdminToken();
+  if (!token) return;
+
+  if (!confirm("【管理者】この投稿を削除しますか？")) return;
+
+  try{
+    const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+      method: "DELETE",
+      headers: { "x-admin-token": token },
+      // body不要（管理者はdeleteKeyチェックしないため）
+    });
+    const data = await r.json();
+    if(!data.ok) throw new Error(data.error || "admin delete failed");
+
+    msg.textContent = "管理者として削除しました。";
+    await loadAnswers(box);
+  }catch(err){
+    alert("管理者削除に失敗：" + err.message);
+  }
+  return;
+}
+
 
         // ---- 削除 ----
         const delBtn = e.target.closest(".qbox-del");
