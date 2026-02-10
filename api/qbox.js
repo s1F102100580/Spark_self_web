@@ -1,4 +1,6 @@
 // api/qbox.js
+export const config = { runtime: "nodejs" };
+
 export default async function handler(req, res) {
   // キャッシュ無効（リアルタイム反映）
   res.setHeader("Cache-Control", "no-store");
