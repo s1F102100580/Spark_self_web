@@ -1884,7 +1884,7 @@ a:hover{ text-decoration:underline; }
 
 .coming-box{
   position: relative;
-  aspect-ratio: 16 / 9;     /* ←ここ！16:9に統一 */
+  aspect-ratio: 12 / 9;     /* ←ここ！16:9に統一 */
   min-width: 0;
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,.18);
