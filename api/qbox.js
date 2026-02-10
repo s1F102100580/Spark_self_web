@@ -1,4 +1,10 @@
 // api/qbox.js
+import crypto from "crypto";
+
+function sha256(s){
+  return crypto.createHash("sha256").update(String(s)).digest("hex");
+}
+
 export const config = { runtime: "nodejs" };
 
 export default async function handler(req, res) {
@@ -50,21 +56,20 @@ export default async function handler(req, res) {
   const promptId = (req.query?.promptId || "default").toString();
 
   // GET: 一覧取得
-  if (req.method === "GET") {
-    try {
-      const raw = await upstash("lrange", listKey, 0, 99); // 最新100件
-      const items = (raw || [])
-        .map(s => {
-          try { return JSON.parse(s); } catch { return null; }
-        })
-        .filter(Boolean)
-        .filter(it => (it.promptId || "default") === promptId);
+if (req.method === "GET") {
+  try {
+    const raw = await upstash("lrange", listKey, 0, 99); // 最新100件
+    const items = (raw || [])
+      .map(s => { try { return JSON.parse(s); } catch { return null; } })
+      .filter(Boolean)
+      .filter(it => (it.promptId || "default") === promptId)
+      .map(({ deleteKeyHash, ...rest }) => rest); // ★漏らさない
 
-      return res.status(200).json({ ok: true, items });
-    } catch (e) {
-      return res.status(500).json({ ok: false, error: e.message });
-    }
+    return res.status(200).json({ ok: true, items });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
   }
+}
 
 // POST: 投稿
 if (req.method === "POST") {
@@ -78,6 +83,9 @@ if (req.method === "POST") {
     if (!song) return res.status(400).json({ ok: false, error: "song required" });
     if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
 
+    const deleteKey = crypto.randomBytes(16).toString("hex");
+    const deleteKeyHash = sha256(deleteKey);
+
     const item = {
       id: `q_${Date.now()}_${Math.random().toString(16).slice(2)}`,
       promptId,
@@ -85,12 +93,15 @@ if (req.method === "POST") {
       song,
       lyric,
       createdAt: new Date().toISOString(),
+      deleteKeyHash,
     };
 
     await upstash("lpush", listKey, JSON.stringify(item));
     await upstash("ltrim", listKey, 0, 199);
 
-    return res.status(201).json({ ok: true, item });
+    // ★返すのは deleteKeyHash なし ＋ deleteKey あり
+    const { deleteKeyHash: _, ...safeItem } = item;
+    return res.status(201).json({ ok: true, item: { ...safeItem, deleteKey } });
   } catch (e) {
     return res.status(500).json({ ok: false, error: e.message });
   }
