@@ -665,6 +665,96 @@
 	</div>
 
 
+	<section class="section" id="qbox">
+	<h2 class="section-title">QUESTION BOX</h2>
+
+	<p class="qbox-prompt">Q. 好きな歌詞は？（理由もあれば！）</p>
+
+	<form id="qboxForm" class="qbox-form">
+		<input type="hidden" name="promptId" value="lyrics" />
+
+		<input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
+		<textarea name="answer" class="qbox-answer" placeholder="回答を書く（最大400文字）" maxlength="400" required></textarea>
+
+		<button class="qbox-submit" type="submit">送信</button>
+		<p id="qboxMsg" class="qbox-msg"></p>
+	</form>
+
+	<div class="qbox-list-wrap">
+		<h3 class="qbox-subtitle">みんなの回答</h3>
+		<div id="qboxList" class="qbox-list"></div>
+	</div>
+	</section>
+
+	<script>
+	const $ = (s) => document.querySelector(s);
+
+	const form = $("#qboxForm");
+	const msg = $("#qboxMsg");
+	const list = $("#qboxList");
+
+	function esc(s){
+		return String(s).replace(/[&<>"']/g, (m) => ({
+		"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+		}[m]));
+	}
+
+	async function loadAnswers(){
+		const promptId = form.querySelector('[name="promptId"]').value;
+		const r = await fetch(`/api/qbox?promptId=${encodeURIComponent(promptId)}`, { cache: "no-store" });
+		const data = await r.json();
+		if(!data.ok) throw new Error(data.error || "load failed");
+
+		const items = data.items || [];
+		list.innerHTML = items.map(it => `
+		<article class="qbox-item">
+			<div class="qbox-meta">
+			<span class="qbox-name">${esc(it.name)}</span>
+			<span class="qbox-time">${new Date(it.createdAt).toLocaleString()}</span>
+			</div>
+			<p class="qbox-text">${esc(it.answer).replace(/\n/g,"<br>")}</p>
+		</article>
+		`).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+	}
+
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		msg.textContent = "";
+		const btn = form.querySelector("button");
+		btn.disabled = true;
+
+		const fd = new FormData(form);
+		const payload = {
+		promptId: fd.get("promptId"),
+		name: fd.get("name"),
+		answer: fd.get("answer"),
+		};
+
+		try{
+		const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(payload),
+		});
+		const data = await r.json();
+		if(!data.ok) throw new Error(data.error || "post failed");
+
+		form.reset();
+		form.querySelector('[name="promptId"]').value = payload.promptId;
+		msg.textContent = "送信しました！";
+		await loadAnswers(); // リアルタイム反映
+		}catch(err){
+		msg.textContent = "送信に失敗：" + err.message;
+		}finally{
+		btn.disabled = false;
+		}
+	});
+
+	loadAnswers().catch(e => { msg.textContent = "読み込み失敗：" + e.message; });
+	</script>
+
+
+
 	
 
 
