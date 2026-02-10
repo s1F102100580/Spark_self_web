@@ -612,22 +612,28 @@
 			<br><span class="about-small">エイベックス・エンタテインメントビジネスマスター</span>
 			<br>
 			<br>
-			<br>■エイベックス・エンタテインメントビジネスマスターについて
+			<br>■エイベックス・エンタテインメント
+			<br>ビジネスマスターについて
 			<br>
-			<br>音楽やライヴ、映画、アニメといったエンタメ業界で活躍するために
+			<br>音楽やライヴ、映画、アニメといった
+			<br>エンタメ業界で活躍するために
 			<br>必要なビジネススキルを1年間の講義と
 			<br>実践的なインターン活動を通じて学べる
 			<br>ビジネススクールです。
 			<br>
 			<br>大学でも専門学校でもない、
-			<br>「好きを仕事にしたい」を叶える場として2001年に開講し、
+			<br>「好きを仕事にしたい」を叶える場として
+			<br>2001年に開講し、
 			<br>これまでに2,500名以上の卒業生を輩出。 
 			<br>
 			<br>業界未経験だった受講生たちが、
-			<br>卒業後にエンタテインメント業界の第一線で活躍しています。
+			<br>卒業後にエンタテインメント業界の第一線で
+			<br>活躍しています。
 			<br>
-			<br>エンタメ業界の最前線で活躍するプロフェショナルによる実践的な講義と、
-			<br>インターンシップをはじめとした実践を伴う活動の経験が、
+			<br>エンタメ業界の最前線で活躍する
+			<br>プロフェショナルによる実践的な講義と、
+			<br>インターンシップをはじめとした
+			<br>実践を伴う活動の経験が、
 			<br>受講生たちを大きな成長に導きます。
 
 			<br><br>
@@ -684,7 +690,7 @@
         maxlength="120" required></textarea>
 
       <button class="qbox-submit" type="submit">送信</button>
-      <p class="qbox-msg"></p>
+      <p class="qbox-msg" aria-live="polite"></p>
     </form>
 
     <div class="qbox-list-wrap">
@@ -726,6 +732,14 @@
       }[m]));
     }
 
+    function fmtTime(iso){
+      try{
+        return new Date(iso).toLocaleString();
+      }catch{
+        return "";
+      }
+    }
+
     async function loadAnswers(box){
       const form = box.querySelector(".qbox-form");
       const msg  = box.querySelector(".qbox-msg");
@@ -740,25 +754,38 @@
         const items = data.items || [];
 
         list.innerHTML = items.map(it => {
-          // 旧形式(answer)が混ざってても落ちないように保険
-          const song = it.song || "";
+          const name  = it.name || "匿名";
+          const song  = it.song || "";
           const lyric = it.lyric || it.answer || "";
-          const canDelete = !!getDeleteKey(it.id);
+          const time  = it.createdAt ? fmtTime(it.createdAt) : "";
+          const canEdit = !!getDeleteKey(it.id);
 
           return `
             <article class="qbox-item">
               <div class="qbox-meta">
-                <span class="qbox-name">${esc(it.name || "匿名")}</span>
-                <span class="qbox-time">${new Date(it.createdAt).toLocaleString()}</span>
+                <span class="qbox-nameview">${esc(name)}</span>
+                <span class="qbox-time">${esc(time)}</span>
               </div>
 
               <p class="qbox-songline">🎵 ${esc(song)}</p>
               <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
 
-              ${canDelete ? `<button class="qbox-del" type="button" data-id="${esc(it.id)}">削除</button>` : ""}
+              ${canEdit ? `
+                <div class="qbox-actions">
+                  <button class="qbox-edit" type="button"
+                    data-id="${esc(it.id)}"
+                    data-name="${esc(name)}"
+                    data-song="${esc(song)}"
+                    data-lyric="${esc(lyric)}"
+                  >編集</button>
+                  <button class="qbox-del" type="button" data-id="${esc(it.id)}">削除</button>
+                </div>
+              ` : ""}
             </article>
           `;
         }).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+
+        msg.textContent = "";
       } catch(e){
         msg.textContent = "読み込み失敗：" + e.message;
       }
@@ -802,6 +829,7 @@
 
           form.reset();
           form.querySelector('[name="promptId"]').value = payload.promptId;
+
           msg.textContent = "送信しました！";
           await loadAnswers(box);
         }catch(err){
@@ -811,30 +839,74 @@
         }
       });
 
-      // 削除（自分の投稿だけボタンが出る）
+      // 編集・削除（イベント委任）
       box.addEventListener("click", async (e) => {
-        const b = e.target.closest(".qbox-del");
-        if(!b) return;
+        const promptId = form.querySelector('[name="promptId"]').value;
 
-        const id = b.dataset.id;
-        const deleteKey = getDeleteKey(id);
-        if(!deleteKey) return;
+        // ---- 編集 ----
+        const editBtn = e.target.closest(".qbox-edit");
+        if (editBtn) {
+          const id = editBtn.dataset.id;
+          const deleteKey = getDeleteKey(id);
+          if (!deleteKey) return;
 
-        if(!confirm("この投稿を削除しますか？")) return;
+          const curName  = editBtn.dataset.name || "";
+          const curSong  = editBtn.dataset.song || "";
+          const curLyric = editBtn.dataset.lyric || "";
 
-        try{
-          const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(form.querySelector('[name="promptId"]').value)}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ deleteKey }),
-          });
-          const data = await r.json();
-          if(!data.ok) throw new Error(data.error || "delete failed");
+          const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
+          const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
+          if (song === null) return;
+          const lyric = prompt("好きな歌詞（短め）", curLyric);
+          if (lyric === null) return;
 
-          removeDeleteKey(id);
-          await loadAnswers(box);
-        }catch(err){
-          alert("削除に失敗：" + err.message);
+          try{
+            const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                deleteKey,
+                name,
+                song: String(song).slice(0, 80),
+                lyric: String(lyric).slice(0, 120),
+              }),
+            });
+            const data = await r.json();
+            if(!data.ok) throw new Error(data.error || "edit failed");
+
+            msg.textContent = "編集しました！";
+            await loadAnswers(box);
+          }catch(err){
+            alert("編集に失敗：" + err.message);
+          }
+          return;
+        }
+
+        // ---- 削除 ----
+        const delBtn = e.target.closest(".qbox-del");
+        if (delBtn) {
+          const id = delBtn.dataset.id;
+          const deleteKey = getDeleteKey(id);
+          if(!deleteKey) return;
+
+          if(!confirm("この投稿を削除しますか？")) return;
+
+          try{
+            const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ deleteKey }),
+            });
+            const data = await r.json();
+            if(!data.ok) throw new Error(data.error || "delete failed");
+
+            removeDeleteKey(id);
+            msg.textContent = "削除しました。";
+            await loadAnswers(box);
+          }catch(err){
+            alert("削除に失敗：" + err.message);
+          }
+          return;
         }
       });
 
@@ -844,6 +916,7 @@
   })();
   </script>
 </section>
+
 
 
 
