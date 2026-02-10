@@ -769,7 +769,10 @@ if (location.hash.includes("admin")) {
           const song  = it.song || "";
           const lyric = it.lyric || it.answer || "";
           const time  = it.createdAt ? fmtTime(it.createdAt) : "";
-          const canEdit = !!getDeleteKey(it.id);
+          const adminOn = !!getAdminToken();     // 管理者ログインしてる？
+		  const canEdit = !!getDeleteKey(it.id); // 自分の投稿？
+		  const canDelete = canEdit || adminOn;  // 自分 or 管理者なら削除できる
+
 
           return `
             <article class="qbox-item">
@@ -781,17 +784,23 @@ if (location.hash.includes("admin")) {
               <p class="qbox-songline">🎵 ${esc(song)}</p>
               <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
 
-              ${canEdit ? `
-                <div class="qbox-actions">
-                  <button class="qbox-edit" type="button"
-                    data-id="${esc(it.id)}"
-                    data-name="${esc(name)}"
-                    data-song="${esc(song)}"
-                    data-lyric="${esc(lyric)}"
-                  >編集</button>
-                  <button class="qbox-del" type="button" data-id="${esc(it.id)}">削除</button>
-                </div>
-              ` : ""}
+              ${canDelete ? `
+  <div class="qbox-actions">
+    ${canEdit ? `
+      <button class="qbox-edit" type="button"
+        data-id="${esc(it.id)}"
+        data-name="${esc(name)}"
+        data-song="${esc(song)}"
+        data-lyric="${esc(lyric)}"
+      >編集</button>
+    ` : ""}
+
+    <button class="qbox-del" type="button" data-id="${esc(it.id)}">
+      ${adminOn && !canEdit ? "管理者削除" : "削除"}
+    </button>
+  </div>
+` : ""}
+
             </article>
           `;
         }).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
@@ -923,31 +932,46 @@ if (adminDelBtn) {
 
 
         // ---- 削除 ----
-        const delBtn = e.target.closest(".qbox-del");
-        if (delBtn) {
-          const id = delBtn.dataset.id;
-          const deleteKey = getDeleteKey(id);
-          if(!deleteKey) return;
+const delBtn = e.target.closest(".qbox-del");
+if (delBtn) {
+  const id = delBtn.dataset.id;
+  const token = getAdminToken();          // 管理者トークン（sessionStorage）
+  const myDeleteKey = getDeleteKey(id);   // 自分の投稿なら入ってる
+  const adminOn = !!token;
 
-          if(!confirm("この投稿を削除しますか？")) return;
+  // 管理者でも本人でもない → 何もしない
+  if (!adminOn && !myDeleteKey) return;
 
-          try{
-            const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ deleteKey }),
-            });
-            const data = await r.json();
-            if(!data.ok) throw new Error(data.error || "delete failed");
+  if (!confirm("この投稿を削除しますか？")) return;
 
-            removeDeleteKey(id);
-            msg.textContent = "削除しました。";
-            await loadAnswers(box);
-          }catch(err){
-            alert("削除に失敗：" + err.message);
-          }
-          return;
-        }
+  try {
+    const headers = { "Content-Type": "application/json" };
+
+    // 管理者ならヘッダーでトークン送る
+    if (adminOn) headers["x-admin-token"] = token;
+
+    const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+      method: "DELETE",
+      headers,
+      body: adminOn
+        ? undefined // 管理者はdeleteKey不要
+        : JSON.stringify({ deleteKey: myDeleteKey }),
+    });
+
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || "delete failed");
+
+    // 自分の投稿を消したなら localStorage の deleteKey も消す
+    if (myDeleteKey) removeDeleteKey(id);
+
+    msg.textContent = adminOn && !myDeleteKey ? "管理者として削除しました。" : "削除しました。";
+    await loadAnswers(box);
+  } catch (err) {
+    alert("削除に失敗：" + err.message);
+  }
+  return;
+}
+
       });
 
       // 初期ロード
