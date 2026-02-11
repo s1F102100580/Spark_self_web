@@ -2789,3 +2789,101 @@ a.link-underline:hover{
     max-width: 760px;        /* PCだけ少し広げるなら */
   }
 }
+
+.qbox-fold {
+  margin-top: 18px;
+}
+
+.qbox-fold__sum {
+  cursor: pointer;
+  user-select: none;
+  font-weight: 900;
+  letter-spacing: .08em;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.22);
+}
+
+.qbox-fold[open] .qbox-fold__sum {
+  opacity: .95;
+}
+
+/* 右側の三角をちょい整える（好み） */
+.qbox-fold__sum::-webkit-details-marker { display:none; }
+.qbox-fold__sum::after {
+  content: "▾";
+  float: right;
+  transform: translateY(-1px);
+  opacity: .8;
+}
+.qbox-fold[open] .qbox-fold__sum::after {
+  content: "▴";
+}
+
+/* =========================
+   QBOX: artist select
+   ========================= */
+
+.qbox-artist{
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.22);
+  color: #fff;
+  outline: none;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.6;
+
+  /* selectのデフォ矢印を消して自前に */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* 右に矢印分の余白 */
+  padding-right: 44px;
+
+  /* ★長い文字対策（基本は不要だけど統一で入れてOK） */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+
+  cursor: pointer;
+}
+
+/* select右側の矢印（▼）を疑似要素で描く */
+.qbox-form{
+  position: relative; /* 既にあってもOK */
+}
+
+/* qbox-artist専用の矢印 */
+.qbox-artist{
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,.85) 50%),
+    linear-gradient(135deg, rgba(255,255,255,.85) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) 52%,
+    calc(100% - 14px) 52%;
+  background-size:
+    6px 6px,
+    6px 6px;
+  background-repeat: no-repeat;
+}
+
+/* フォーカス時に少し目立たせる（好みで） */
+.qbox-artist:focus{
+  border-color: rgba(255,255,255,.38);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.08);
+}
+
+/* 無効/未選択っぽく見せたい場合（最初のoption用） */
+.qbox-artist:invalid{
+  color: rgba(255,255,255,.60);
+}
+
+/* optionの背景（ブラウザによって効き方は差がある） */
+.qbox-artist option{
+  background: #0b0b10;
+  color: #fff;
+}
