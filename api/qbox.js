@@ -110,8 +110,15 @@ export default async function handler(req, res) {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
       const name = (body?.name || "").toString().trim().slice(0, 32);
+      const artist = (body?.artist || "").toString().trim();
       const song = (body?.song || "").toString().trim().slice(0, 80);
       const lyric = (body?.lyric || "").toString().trim().slice(0, 120);
+
+      const allowedArtists = new Set(["Gum-9", "Fish and Lips", "らそんぶる"]);
+      if (!allowedArtists.has(artist)) {
+        return res.status(400).json({ ok: false, error: "artist required" });
+      }
+
 
       if (!song) return res.status(400).json({ ok: false, error: "song required" });
       if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
@@ -123,6 +130,7 @@ export default async function handler(req, res) {
         id: `q_${Date.now()}_${Math.random().toString(16).slice(2)}`,
         promptId,
         name: name || "匿名",
+        artist,
         song,
         lyric,
         createdAt: new Date().toISOString(),
@@ -184,8 +192,15 @@ if (req.method === "DELETE") {
       if (!deleteKey) return res.status(400).json({ ok: false, error: "deleteKey required" });
 
       const name = (body?.name || "").toString().trim().slice(0, 32);
+      const artist = (body?.artist || "").toString().trim();
       const song = (body?.song || "").toString().trim().slice(0, 80);
       const lyric = (body?.lyric || "").toString().trim().slice(0, 120);
+
+      const allowedArtists = new Set(["Gum-9", "Fish and Lips", "らそんぶる"]);
+      if (!allowedArtists.has(artist)) {
+        return res.status(400).json({ ok: false, error: "artist required" });
+      }
+
 
       if (!song) return res.status(400).json({ ok: false, error: "song required" });
       if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
