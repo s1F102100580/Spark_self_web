@@ -118,7 +118,7 @@
   <a href="#music">MOVIE</a>
   <a href="#news">NEWS</a>
   <a href="#gallery">GALLERY</a>
-  <a href="#qbox">question</a>
+  <a href="#qbox">QUESTION</a>
 </nav>
 
 <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false">
@@ -139,7 +139,7 @@
     <a href="#music">MOVIE</a>
     <a href="#news">NEWS</a>
     <a href="#gallery">GALLERY</a>
-	<a href="#qbox">question</a>
+	<a href="#qbox">QUESTION</a>
   </nav>
 </div>
 
@@ -681,24 +681,37 @@
     <p class="qbox-prompt">Q. 好きな曲と、その曲の一番好きな歌詞（短め）を教えて！</p>
 
     <form class="qbox-form">
-      <input type="hidden" name="promptId" value="song_lyric" />
+		<input type="hidden" name="promptId" value="song_lyric" />
 
-      <input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
+		<input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
 
-      <input name="song" class="qbox-song" placeholder="好きな曲（曲名 / アーティスト）" maxlength="80" required />
+		<select name="artist" class="qbox-artist" required>
+			<option value="" disabled selected>好きなアーティストを選択（必須）</option>
+			<option value="Gum-9">Gum-9</option>
+			<option value="Fish and Lips">Fish and Lips</option>
+			<option value="らそんぶる">らそんぶる</option>
+		</select>
 
-      <textarea name="lyric" class="qbox-answer"
-        placeholder="好きな歌詞（短い一節で！最大120文字）"
-        maxlength="120" required></textarea>
+		<input name="song" class="qbox-song" placeholder="好きな曲" maxlength="80" required />
 
-      <button class="qbox-submit" type="submit">送信</button>
-      <p class="qbox-msg" aria-live="polite"></p>
-    </form>
+		<textarea name="lyric" class="qbox-answer"
+			placeholder="好きな歌詞（短い一節で！最大120文字）"
+			maxlength="120" required></textarea>
 
-    <div class="qbox-list-wrap">
-      <h3 class="qbox-subtitle">みんなの回答</h3>
-      <div class="qbox-list"></div>
-    </div>
+		<button class="qbox-submit" type="submit">送信</button>
+		<p class="qbox-msg" aria-live="polite"></p>
+	</form>
+
+
+    <details class="qbox-fold">
+		<summary class="qbox-fold__sum">みんなの回答を見る</summary>
+
+		<div class="qbox-list-wrap">
+			<h3 class="qbox-subtitle">みんなの回答</h3>
+			<div class="qbox-list"></div>
+		</div>
+	</details>
+
   </div>
 
   <script>
@@ -768,6 +781,7 @@ if (location.hash.includes("admin")) {
 
         list.innerHTML = items.map(it => {
           const name  = it.name || "匿名";
+		  const artist = it.artist || "";
           const song  = it.song || "";
           const lyric = it.lyric || it.answer || "";
           const time  = it.createdAt ? fmtTime(it.createdAt) : "";
@@ -783,6 +797,7 @@ if (location.hash.includes("admin")) {
                 <span class="qbox-time">${esc(time)}</span>
               </div>
 
+			  <p class="qbox-artistline">🎤 ${esc(artist)}</p>
               <p class="qbox-songline">🎵 ${esc(song)}</p>
               <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
 
@@ -831,6 +846,7 @@ if (location.hash.includes("admin")) {
         const payload = {
           promptId: fd.get("promptId"),
           name: fd.get("name"),
+		  artist: fd.get("artist"),
           song: fd.get("song"),
           lyric: fd.get("lyric"),
         };
@@ -853,6 +869,8 @@ if (location.hash.includes("admin")) {
           form.querySelector('[name="promptId"]').value = payload.promptId;
 
           msg.textContent = "送信しました！";
+		  const fold = box.querySelector(".qbox-fold");
+			if (fold) fold.open = true;
           await loadAnswers(box);
         }catch(err){
           msg.textContent = "送信に失敗：" + err.message;
@@ -899,6 +917,8 @@ if (location.hash.includes("admin")) {
             if(!data.ok) throw new Error(data.error || "edit failed");
 
             msg.textContent = "編集しました！";
+			const fold = box.querySelector(".qbox-fold");
+			if (fold) fold.open = true;
             await loadAnswers(box);
           }catch(err){
             alert("編集に失敗：" + err.message);
@@ -967,6 +987,8 @@ if (delBtn) {
     if (myDeleteKey) removeDeleteKey(id);
 
     msg.textContent = adminOn && !myDeleteKey ? "管理者として削除しました。" : "削除しました。";
+	const fold = box.querySelector(".qbox-fold");
+	if (fold) fold.open = true;
     await loadAnswers(box);
   } catch (err) {
     alert("削除に失敗：" + err.message);
@@ -977,7 +999,19 @@ if (delBtn) {
       });
 
       // 初期ロード
-      loadAnswers(box);
+      // 折りたたみ（開いた時だけロード）
+		const fold = box.querySelector(".qbox-fold");
+		let loadedOnce = false;
+
+		if (fold) {
+		fold.addEventListener("toggle", async () => {
+			if (fold.open && !loadedOnce) {
+			await loadAnswers(box);
+			loadedOnce = true;
+			}
+		});
+		}
+
     });
   })();
   </script>
