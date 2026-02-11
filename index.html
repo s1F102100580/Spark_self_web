@@ -721,10 +721,15 @@ const setAdminToken = (t) => sessionStorage.setItem(ADMIN_STORE, String(t || "")
 const clearAdminToken = () => sessionStorage.removeItem(ADMIN_STORE);
 
 // URLに #admin が付いてたらログイン（例: https://.../#admin）
-if (location.hash.includes("admin")) {
+// URLに #admin が付いてたらログイン（例: https://.../#admin）
+const params = new URLSearchParams(location.search);
+
+// ?admin=1 か #admin ならログイン
+if (params.get("admin") === "1" || location.hash.includes("admin")) {
   const t = prompt("管理者トークンを入力");
   if (t) setAdminToken(t.trim());
 }
+
 
   (() => {
     // =========================
