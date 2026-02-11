@@ -812,6 +812,7 @@ if (params.get("admin") === "1" || location.hash.includes("admin")) {
       <button class="qbox-edit" type="button"
         data-id="${esc(it.id)}"
         data-name="${esc(name)}"
+		data-artist="${esc(artist)}"
         data-song="${esc(song)}"
         data-lyric="${esc(lyric)}"
       >編集</button>
@@ -890,49 +891,57 @@ if (params.get("admin") === "1" || location.hash.includes("admin")) {
       box.addEventListener("click", async (e) => {
         const promptId = form.querySelector('[name="promptId"]').value;
 
-        // ---- 編集 ----
-        const editBtn = e.target.closest(".qbox-edit");
-        if (editBtn) {
-          const id = editBtn.dataset.id;
-          const deleteKey = getDeleteKey(id);
-          if (!deleteKey) return;
+       // ---- 編集 ----
+const editBtn = e.target.closest(".qbox-edit");
+if (editBtn) {
+  const id = editBtn.dataset.id;
+  const deleteKey = getDeleteKey(id);
+  if (!deleteKey) return;
 
-          const curName  = editBtn.dataset.name || "";
-          const curSong  = editBtn.dataset.song || "";
-          const curLyric = editBtn.dataset.lyric || "";
+  const curName   = editBtn.dataset.name || "";
+  const curArtist = editBtn.dataset.artist || ""; // ★追加
+  const curSong   = editBtn.dataset.song || "";
+  const curLyric  = editBtn.dataset.lyric || "";
 
-          const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
-          const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
-          if (song === null) return;
-          const lyric = prompt("好きな歌詞（短め）", curLyric);
-          if (lyric === null) return;
+  const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
 
-          try{
-            const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                deleteKey,
-                name,
-                song: String(song).slice(0, 80),
-                lyric: String(lyric).slice(0, 120),
-              }),
-            });
-            const data = await r.json();
-            if(!data.ok) throw new Error(data.error || "edit failed");
+  // ★ここに入れる（song の前でも後でもOK）
+  const artist = prompt("アーティスト（Gum-9 / Fish and Lips / らそんぶる）", curArtist);
+	if (artist === null) return;
 
-            msg.textContent = "編集しました！";
-			const fold = box.querySelector(".qbox-fold");
-			if (fold) fold.open = true;
-            await loadAnswers(box);
-          }catch(err){
-            alert("編集に失敗：" + err.message);
-          }
-          return;
-        }
+	const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
+	if (song === null) return;
+
+	const lyric = prompt("好きな歌詞（短め）", curLyric);
+	if (lyric === null) return;
+
+	try{
+		const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+		method: "PUT",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
+			deleteKey,
+			name,
+			artist: String(artist).trim(), // ★ここも追加
+			song: String(song).slice(0, 80),
+			lyric: String(lyric).slice(0, 120),
+		}),
+		});
+		const data = await r.json();
+		if(!data.ok) throw new Error(data.error || "edit failed");
+
+		msg.textContent = "編集しました！";
+		const fold = box.querySelector(".qbox-fold");
+		if (fold) fold.open = true;
+		await loadAnswers(box);
+	}catch(err){
+		alert("編集に失敗：" + err.message);
+	}
+	return;
+	}
+
 
 		// ---- 管理者削除 ----
-const adminDelBtn = e.target.closest(".qbox-admin-del");
 if (adminDelBtn) {
   const id = adminDelBtn.dataset.id;
   const token = getAdminToken();
