@@ -715,32 +715,6 @@
 
   </div>
 
-
-  <div class="qbox" data-prompt="honest">
-	<p class="qbox-prompt">Q. 普段なら言えない本音を、ここに置いていってください。</p>
-
-	<form class="qbox-form">
-		<input type="hidden" name="promptId" value="honest" />
-
-		<textarea name="text" class="qbox-answer"
-		placeholder="匿名でOK。短くても大丈夫。（最大240文字）"
-		maxlength="240" required></textarea>
-
-		<button class="qbox-submit" type="submit">送信</button>
-		<p class="qbox-msg" aria-live="polite"></p>
-	</form>
-
-	<details class="qbox-fold">
-		<summary class="qbox-fold__sum">みんなの本音を見る</summary>
-
-		<div class="qbox-list-wrap">
-		<h3 class="qbox-subtitle">みんなの本音</h3>
-		<div class="qbox-list"></div>
-		</div>
-	</details>
-	</div>
-
-
   <script>
 	const ADMIN_STORE = "qbox:adminToken";
 const getAdminToken = () => sessionStorage.getItem(ADMIN_STORE) || "";
@@ -876,37 +850,13 @@ if (params.get("admin") === "1" || location.hash.includes("admin")) {
         btn.disabled = true;
 
         const fd = new FormData(form);
-const promptId = fd.get("promptId");
-
-let payload = { promptId };
-
-// song_lyric
-if (promptId === "song_lyric") {
-  payload = {
-    promptId,
-    name: fd.get("name"),
-    artist: fd.get("artist"),
-    song: fd.get("song"),
-    lyric: fd.get("lyric"),
-  };
-}
-
-// honest
-if (promptId === "honest") {
-  payload = {
-    promptId,
-    text: fd.get("text"),
-  };
-}
-<div class="gmodal" id="honestModal" aria-hidden="true">
-  <div class="gmodal-overlay" data-close="true"></div>
-
-  <div class="gmodal-panel" role="dialog" aria-modal="true" aria-label="本音">
-    <button class="gmodal-close" type="button" aria-label="閉じる" data-close="true">×</button>
-    <p id="honestModalText" style="white-space:pre-wrap; line-height:1.8;"></p>
-  </div>
-</div>
-
+        const payload = {
+          promptId: fd.get("promptId"),
+          name: fd.get("name"),
+		  artist: fd.get("artist"),
+          song: fd.get("song"),
+          lyric: fd.get("lyric"),
+        };
 
         try{
           const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
@@ -936,82 +886,7 @@ if (promptId === "honest") {
         }
       });
 
-	  	const honestModal = document.getElementById("honestModal");
-		const honestModalText = document.getElementById("honestModalText");
-
-		const openHonest = (text) => {
-		if (!honestModal || !honestModalText) return;
-		honestModalText.textContent = text || "";
-		honestModal.classList.add("is-open");
-		honestModal.setAttribute("aria-hidden", "false");
-		document.documentElement.style.overflow = "hidden";
-		};
-
-		const closeHonest = () => {
-		if (!honestModal) return;
-		honestModal.classList.remove("is-open");
-		honestModal.setAttribute("aria-hidden", "true");
-		document.documentElement.style.overflow = "";
-		if (honestModalText) honestModalText.textContent = "";
-		};
-
-		document.addEventListener("click", (e) => {
-		if (e.target.closest("#honestModal [data-close='true']")) closeHonest();
-		});
-		document.addEventListener("keydown", (e) => {
-		if (e.key === "Escape" && honestModal?.classList.contains("is-open")) closeHonest();
-		});
-
-		const promptId = form.querySelector('[name="promptId"]').value;
-
-		list.innerHTML = items.map(it => {
-		const name  = it.name || "匿名";
-		const time  = it.createdAt ? fmtTime(it.createdAt) : "";
-		const adminOn = !!getAdminToken();
-		const canEdit = !!getDeleteKey(it.id);
-		const canDelete = canEdit || adminOn;
-
-		// 本音
-		if (promptId === "honest") {
-			const text = it.text || it.answer || "";
-			return `
-			<article class="qbox-item qbox-honest"
-				data-full="${esc(text)}"
-				style="cursor:pointer;"
-			>
-				<div class="qbox-meta">
-				<span class="qbox-nameview">匿名</span>
-				<span class="qbox-time">${esc(time)}</span>
-				</div>
-
-				<p class="qbox-text">（タップで全文表示）</p>
-
-				${canDelete ? `
-				<div class="qbox-actions">
-					<button class="qbox-del" type="button" data-id="${esc(it.id)}">
-					${adminOn && !canEdit ? "管理者削除" : "削除"}
-					</button>
-				</div>
-				` : ""}
-			</article>
-			`;
-		}
-
-  // 既存：song_lyric（今のまま）
-  const artist = it.artist || "";
-  const song  = it.song || "";
-  const lyric = it.lyric || it.answer || "";
-
-	return `...（今の既存テンプレ）...`;
-	}).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
-
-	const honestCard = e.target.closest(".qbox-honest");
-	if (honestCard && !e.target.closest("button")) {
-	const full = honestCard.getAttribute("data-full") || "";
-	openHonest(full);
-	return;
-	}
-
+	  
 
       // 編集・削除（イベント委任）
       box.addEventListener("click", async (e) => {
