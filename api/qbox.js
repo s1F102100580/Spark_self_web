@@ -1,4 +1,4 @@
-//api/qbox.js
+// api/qbox.js
 import crypto from "crypto";
 function safeEq(a, b){
   const aa = Buffer.from(String(a || ""));
@@ -104,27 +104,12 @@ export default async function handler(req, res) {
     }
   }
 
-// POST: 投稿（deleteKey を1回だけ返す）
-if (req.method === "POST") {
-  try {
-    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+  // POST: 投稿（deleteKey を1回だけ返す）
+  if (req.method === "POST") {
+    try {
+      const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
-    const name = (body?.name || "").toString().trim().slice(0, 32);
-    const promptId = (body?.promptId || req.query?.promptId || "default").toString();
-
-    const deleteKey = crypto.randomBytes(16).toString("hex");
-    const deleteKeyHash = sha256(deleteKey);
-
-    // ★ prompt別に扱う
-    let item = {
-      id: `q_${Date.now()}_${Math.random().toString(16).slice(2)}`,
-      promptId,
-      name: name || "匿名",
-      createdAt: new Date().toISOString(),
-      deleteKeyHash,
-    };
-
-    if (promptId === "song_lyric") {
+      const name = (body?.name || "").toString().trim().slice(0, 32);
       const artist = (body?.artist || "").toString().trim();
       const song = (body?.song || "").toString().trim().slice(0, 80);
       const lyric = (body?.lyric || "").toString().trim().slice(0, 120);
@@ -133,30 +118,34 @@ if (req.method === "POST") {
       if (!allowedArtists.has(artist)) {
         return res.status(400).json({ ok: false, error: "artist required" });
       }
+
+
       if (!song) return res.status(400).json({ ok: false, error: "song required" });
       if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
 
-      item = { ...item, artist, song, lyric };
+      const deleteKey = crypto.randomBytes(16).toString("hex");
+      const deleteKeyHash = sha256(deleteKey);
+
+      const item = {
+        id: `q_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+        promptId,
+        name: name || "匿名",
+        artist,
+        song,
+        lyric,
+        createdAt: new Date().toISOString(),
+        deleteKeyHash,
+      };
+
+      await upstash("lpush", listKey, JSON.stringify(item));
+      await upstash("ltrim", listKey, 0, 199);
+
+      const { deleteKeyHash: _, ...safeItem } = item;
+      return res.status(201).json({ ok: true, item: { ...safeItem, deleteKey } });
+    } catch (e) {
+      return res.status(500).json({ ok: false, error: e.message });
     }
-
-    if (promptId === "honest") {
-      // 本音：匿名前提なので name は使わなくてもOK（使うなら任意）
-      const text = (body?.text || body?.answer || "").toString().trim().slice(0, 240);
-      if (!text) return res.status(400).json({ ok: false, error: "text required" });
-
-      // 匿名に寄せるなら強制匿名でもOK
-      item = { ...item, name: "匿名", text };
-    }
-
-    await upstash("lpush", listKey, JSON.stringify(item));
-    await upstash("ltrim", listKey, 0, 199);
-
-    const { deleteKeyHash: _, ...safeItem } = item;
-    return res.status(201).json({ ok: true, item: { ...safeItem, deleteKey } });
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: e.message });
   }
-}
 
   // DELETE: 自分の投稿を削除（deleteKey 必須）
 // + 管理者は deleteKey なしで削除OK
