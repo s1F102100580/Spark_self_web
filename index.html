@@ -667,368 +667,366 @@
 				</a>
 			</div>
 			</div>
-		</div>
 		</section>
 	</div>
 
-	<section class="section" aria-label="qbox">
-		<h2 class="section-title">QUESTION BOX</h2>
-
-		<div class="qbox" data-prompt="song_lyric">
-			<p class="qbox-prompt">Q. 好きな曲と、その曲の一番好きな歌詞（短め）を教えて！</p>
-
-			<form class="qbox-form">
-				<input type="hidden" name="promptId" value="song_lyric" />
-
-				<input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
-
-				<select name="artist" class="qbox-artist" required>
-					<option value="" disabled selected>好きなアーティストを選択（必須）</option>
-					<option value="Gum-9">Gum-9</option>
-					<option value="Fish and Lips">Fish and Lips</option>
-					<option value="らそんぶる">らそんぶる</option>
-				</select>
-
-				<input name="song" class="qbox-song" placeholder="好きな曲" maxlength="80" required />
-
-				<textarea name="lyric" class="qbox-answer"
-					placeholder="好きな歌詞（短い一節で！最大120文字）"
-					maxlength="120" required></textarea>
-
-				<button class="qbox-submit" type="submit">送信</button>
-				<p class="qbox-msg" aria-live="polite"></p>
-			</form>
+	</div>
 
 
-			<details class="qbox-fold">
-				<summary class="qbox-fold__sum">みんなの回答を見る</summary>
+<section class="section" aria-label="qbox">
+  <h2 class="section-title">QUESTION BOX</h2>
 
-				<div class="qbox-list-wrap">
-					<h3 class="qbox-subtitle">みんなの回答</h3>
-					<div class="qbox-list"></div>
-				</div>
-			</details>
+  <div class="qbox" data-prompt="song_lyric">
+    <p class="qbox-prompt">Q. 好きな曲と、その曲の一番好きな歌詞（短め）を教えて！</p>
 
+    <form class="qbox-form">
+		<input type="hidden" name="promptId" value="song_lyric" />
+
+		<input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
+
+		<select name="artist" class="qbox-artist" required>
+			<option value="" disabled selected>好きなアーティストを選択（必須）</option>
+			<option value="Gum-9">Gum-9</option>
+			<option value="Fish and Lips">Fish and Lips</option>
+			<option value="らそんぶる">らそんぶる</option>
+		</select>
+
+		<input name="song" class="qbox-song" placeholder="好きな曲" maxlength="80" required />
+
+		<textarea name="lyric" class="qbox-answer"
+			placeholder="好きな歌詞（短い一節で！最大120文字）"
+			maxlength="120" required></textarea>
+
+		<button class="qbox-submit" type="submit">送信</button>
+		<p class="qbox-msg" aria-live="polite"></p>
+	</form>
+
+
+    <details class="qbox-fold">
+		<summary class="qbox-fold__sum">みんなの回答を見る</summary>
+
+		<div class="qbox-list-wrap">
+			<h3 class="qbox-subtitle">みんなの回答</h3>
+			<div class="qbox-list"></div>
 		</div>
-	</section>
+	</details>
 
-
-
+  </div>
 
   <script>
 	const ADMIN_STORE = "qbox:adminToken";
-const getAdminToken = () => sessionStorage.getItem(ADMIN_STORE) || "";
-const setAdminToken = (t) => sessionStorage.setItem(ADMIN_STORE, String(t || ""));
-const clearAdminToken = () => sessionStorage.removeItem(ADMIN_STORE);
+	const getAdminToken = () => sessionStorage.getItem(ADMIN_STORE) || "";
+	const setAdminToken = (t) => sessionStorage.setItem(ADMIN_STORE, String(t || ""));
+	const clearAdminToken = () => sessionStorage.removeItem(ADMIN_STORE);
 
-// URLに #admin が付いてたらログイン（例: https://.../#admin）
-// URLに #admin が付いてたらログイン（例: https://.../#admin）
-const params = new URLSearchParams(location.search);
+	// URLに #admin が付いてたらログイン（例: https://.../#admin）
+	// URLに #admin が付いてたらログイン（例: https://.../#admin）
+	const params = new URLSearchParams(location.search);
 
-// ?admin=1 か #admin ならログイン
-if (params.get("admin") === "1" || location.hash.includes("admin")) {
-  const t = prompt("管理者トークンを入力");
-  if (t) setAdminToken(t.trim());
-}
-
-
-  (() => {
-    // =========================
-    // storage: 自分の投稿の削除キーを覚える
-    // =========================
-    const STORE_KEY = "qbox:delkeys";
-
-    const getMap = () => {
-      try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); }
-      catch { return {}; }
-    };
-    const setMap = (m) => localStorage.setItem(STORE_KEY, JSON.stringify(m));
-    const getDeleteKey = (id) => (getMap()[id] || "");
-    const storeDeleteKey = (id, deleteKey) => {
-      const m = getMap();
-      m[id] = deleteKey;
-      setMap(m);
-    };
-    const removeDeleteKey = (id) => {
-      const m = getMap();
-      delete m[id];
-      setMap(m);
-    };
-
-    // =========================
-    // util
-    // =========================
-    function esc(s){
-      return String(s).replace(/[&<>"']/g, (m) => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-      }[m]));
-    }
-
-    function fmtTime(iso){
-      try{
-        return new Date(iso).toLocaleString();
-      }catch{
-        return "";
-      }
-    }
-
-    async function loadAnswers(box){
-      const form = box.querySelector(".qbox-form");
-      const msg  = box.querySelector(".qbox-msg");
-      const list = box.querySelector(".qbox-list");
-      const promptId = form.querySelector('[name="promptId"]').value;
-
-      try{
-        const r = await fetch(`/api/qbox?promptId=${encodeURIComponent(promptId)}`, { cache: "no-store" });
-        const data = await r.json();
-        if(!data.ok) throw new Error(data.error || "load failed");
-
-        const items = data.items || [];
-
-        list.innerHTML = items.map(it => {
-          const name  = it.name || "匿名";
-		  const artist = it.artist || "";
-          const song  = it.song || "";
-          const lyric = it.lyric || it.answer || "";
-          const time  = it.createdAt ? fmtTime(it.createdAt) : "";
-          const adminOn = !!getAdminToken();     // 管理者ログインしてる？
-		  const canEdit = !!getDeleteKey(it.id); // 自分の投稿？
-		  const canDelete = canEdit || adminOn;  // 自分 or 管理者なら削除できる
+	// ?admin=1 か #admin ならログイン
+	if (params.get("admin") === "1" || location.hash.includes("admin")) {
+	const t = prompt("管理者トークンを入力");
+	if (t) setAdminToken(t.trim());
+	}
 
 
-          return `
-            <article class="qbox-item">
-              <div class="qbox-meta">
-                <span class="qbox-nameview">${esc(name)}</span>
-                <span class="qbox-time">${esc(time)}</span>
-              </div>
+	(() => {
+		// =========================
+		// storage: 自分の投稿の削除キーを覚える
+		// =========================
+		const STORE_KEY = "qbox:delkeys";
 
-			  <p class="qbox-artistline">🎤 ${esc(artist)}</p>
-              <p class="qbox-songline">🎵 ${esc(song)}</p>
-              <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
+		const getMap = () => {
+		try { return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); }
+		catch { return {}; }
+		};
+		const setMap = (m) => localStorage.setItem(STORE_KEY, JSON.stringify(m));
+		const getDeleteKey = (id) => (getMap()[id] || "");
+		const storeDeleteKey = (id, deleteKey) => {
+		const m = getMap();
+		m[id] = deleteKey;
+		setMap(m);
+		};
+		const removeDeleteKey = (id) => {
+		const m = getMap();
+		delete m[id];
+		setMap(m);
+		};
 
-              ${canDelete ? `
-  <div class="qbox-actions">
-    ${canEdit ? `
-      <button class="qbox-edit" type="button"
-        data-id="${esc(it.id)}"
-        data-name="${esc(name)}"
-		data-artist="${esc(artist)}"
-        data-song="${esc(song)}"
-        data-lyric="${esc(lyric)}"
-      >編集</button>
-    ` : ""}
+		// =========================
+		// util
+		// =========================
+		function esc(s){
+		return String(s).replace(/[&<>"']/g, (m) => ({
+			"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+		}[m]));
+		}
 
-    <button class="qbox-del" type="button" data-id="${esc(it.id)}">
-      ${adminOn && !canEdit ? "管理者削除" : "削除"}
-    </button>
-  </div>
-` : ""}
+		function fmtTime(iso){
+		try{
+			return new Date(iso).toLocaleString();
+		}catch{
+			return "";
+		}
+		}
 
-            </article>
-          `;
-        }).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+		async function loadAnswers(box){
+		const form = box.querySelector(".qbox-form");
+		const msg  = box.querySelector(".qbox-msg");
+		const list = box.querySelector(".qbox-list");
+		const promptId = form.querySelector('[name="promptId"]').value;
 
-        msg.textContent = "";
-      } catch(e){
-        msg.textContent = "読み込み失敗：" + e.message;
-      }
-    }
+		try{
+			const r = await fetch(`/api/qbox?promptId=${encodeURIComponent(promptId)}`, { cache: "no-store" });
+			const data = await r.json();
+			if(!data.ok) throw new Error(data.error || "load failed");
 
-    // =========================
-    // init
-    // =========================
-    document.querySelectorAll("#qbox .qbox").forEach((box) => {
-      const form = box.querySelector(".qbox-form");
-      const msg  = box.querySelector(".qbox-msg");
-      const btn  = box.querySelector(".qbox-submit");
+			const items = data.items || [];
 
-      // 投稿
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        msg.textContent = "";
-        btn.disabled = true;
+			list.innerHTML = items.map(it => {
+			const name  = it.name || "匿名";
+			const artist = it.artist || "";
+			const song  = it.song || "";
+			const lyric = it.lyric || it.answer || "";
+			const time  = it.createdAt ? fmtTime(it.createdAt) : "";
+			const adminOn = !!getAdminToken();     // 管理者ログインしてる？
+			const canEdit = !!getDeleteKey(it.id); // 自分の投稿？
+			const canDelete = canEdit || adminOn;  // 自分 or 管理者なら削除できる
 
-        const fd = new FormData(form);
-        const payload = {
-          promptId: fd.get("promptId"),
-          name: fd.get("name"),
-		  artist: fd.get("artist"),
-          song: fd.get("song"),
-          lyric: fd.get("lyric"),
-        };
 
-        try{
-          const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const data = await r.json();
-          if(!data.ok) throw new Error(data.error || "post failed");
+			return `
+				<article class="qbox-item">
+				<div class="qbox-meta">
+					<span class="qbox-nameview">${esc(name)}</span>
+					<span class="qbox-time">${esc(time)}</span>
+				</div>
 
-          // ★deleteKeyを保存（APIが item.deleteKey を返す前提）
-          if (data.item?.id && data.item?.deleteKey) {
-            storeDeleteKey(data.item.id, data.item.deleteKey);
-          }
+				<p class="qbox-artistline">🎤 ${esc(artist)}</p>
+				<p class="qbox-songline">🎵 ${esc(song)}</p>
+				<p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
 
-          form.reset();
-          form.querySelector('[name="promptId"]').value = payload.promptId;
+				${canDelete ? `
+	<div class="qbox-actions">
+		${canEdit ? `
+		<button class="qbox-edit" type="button"
+			data-id="${esc(it.id)}"
+			data-name="${esc(name)}"
+			data-artist="${esc(artist)}"
+			data-song="${esc(song)}"
+			data-lyric="${esc(lyric)}"
+		>編集</button>
+		` : ""}
 
-          msg.textContent = "送信しました！";
-		  const fold = box.querySelector(".qbox-fold");
+		<button class="qbox-del" type="button" data-id="${esc(it.id)}">
+		${adminOn && !canEdit ? "管理者削除" : "削除"}
+		</button>
+	</div>
+	` : ""}
+
+				</article>
+			`;
+			}).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+
+			msg.textContent = "";
+		} catch(e){
+			msg.textContent = "読み込み失敗：" + e.message;
+		}
+		}
+
+		// =========================
+		// init
+		// =========================
+		document.querySelectorAll("#qbox .qbox").forEach((box) => {
+		const form = box.querySelector(".qbox-form");
+		const msg  = box.querySelector(".qbox-msg");
+		const btn  = box.querySelector(".qbox-submit");
+
+		// 投稿
+		form.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			msg.textContent = "";
+			btn.disabled = true;
+
+			const fd = new FormData(form);
+			const payload = {
+			promptId: fd.get("promptId"),
+			name: fd.get("name"),
+			artist: fd.get("artist"),
+			song: fd.get("song"),
+			lyric: fd.get("lyric"),
+			};
+
+			try{
+			const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(payload),
+			});
+			const data = await r.json();
+			if(!data.ok) throw new Error(data.error || "post failed");
+
+			// ★deleteKeyを保存（APIが item.deleteKey を返す前提）
+			if (data.item?.id && data.item?.deleteKey) {
+				storeDeleteKey(data.item.id, data.item.deleteKey);
+			}
+
+			form.reset();
+			form.querySelector('[name="promptId"]').value = payload.promptId;
+
+			msg.textContent = "送信しました！";
+			const fold = box.querySelector(".qbox-fold");
+				if (fold) fold.open = true;
+			await loadAnswers(box);
+			}catch(err){
+			msg.textContent = "送信に失敗：" + err.message;
+			}finally{
+			btn.disabled = false;
+			}
+		});
+
+		
+
+		// 編集・削除（イベント委任）
+		box.addEventListener("click", async (e) => {
+			const promptId = form.querySelector('[name="promptId"]').value;
+
+		// ---- 編集 ----
+	const editBtn = e.target.closest(".qbox-edit");
+	if (editBtn) {
+	const id = editBtn.dataset.id;
+	const deleteKey = getDeleteKey(id);
+	if (!deleteKey) return;
+
+	const curName   = editBtn.dataset.name || "";
+	const curArtist = editBtn.dataset.artist || ""; // ★追加
+	const curSong   = editBtn.dataset.song || "";
+	const curLyric  = editBtn.dataset.lyric || "";
+
+	const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
+
+	// ★ここに入れる（song の前でも後でもOK）
+	const artist = prompt("アーティスト（Gum-9 / Fish and Lips / らそんぶる）", curArtist);
+		if (artist === null) return;
+
+		const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
+		if (song === null) return;
+
+		const lyric = prompt("好きな歌詞（短め）", curLyric);
+		if (lyric === null) return;
+
+		try{
+			const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				deleteKey,
+				name,
+				artist: String(artist).trim(), // ★ここも追加
+				song: String(song).slice(0, 80),
+				lyric: String(lyric).slice(0, 120),
+			}),
+			});
+			const data = await r.json();
+			if(!data.ok) throw new Error(data.error || "edit failed");
+
+			msg.textContent = "編集しました！";
+			const fold = box.querySelector(".qbox-fold");
 			if (fold) fold.open = true;
-          await loadAnswers(box);
-        }catch(err){
-          msg.textContent = "送信に失敗：" + err.message;
-        }finally{
-          btn.disabled = false;
-        }
-      });
+			await loadAnswers(box);
+		}catch(err){
+			alert("編集に失敗：" + err.message);
+		}
+		return;
+		}
 
-	  
 
-      // 編集・削除（イベント委任）
-      box.addEventListener("click", async (e) => {
-        const promptId = form.querySelector('[name="promptId"]').value;
+			// ---- 管理者削除 ----
+	if (adminDelBtn) {
+	const id = adminDelBtn.dataset.id;
+	const token = getAdminToken();
+	if (!token) return;
 
-       // ---- 編集 ----
-const editBtn = e.target.closest(".qbox-edit");
-if (editBtn) {
-  const id = editBtn.dataset.id;
-  const deleteKey = getDeleteKey(id);
-  if (!deleteKey) return;
-
-  const curName   = editBtn.dataset.name || "";
-  const curArtist = editBtn.dataset.artist || ""; // ★追加
-  const curSong   = editBtn.dataset.song || "";
-  const curLyric  = editBtn.dataset.lyric || "";
-
-  const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
-
-  // ★ここに入れる（song の前でも後でもOK）
-  const artist = prompt("アーティスト（Gum-9 / Fish and Lips / らそんぶる）", curArtist);
-	if (artist === null) return;
-
-	const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
-	if (song === null) return;
-
-	const lyric = prompt("好きな歌詞（短め）", curLyric);
-	if (lyric === null) return;
+	if (!confirm("【管理者】この投稿を削除しますか？")) return;
 
 	try{
 		const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-		method: "PUT",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			deleteKey,
-			name,
-			artist: String(artist).trim(), // ★ここも追加
-			song: String(song).slice(0, 80),
-			lyric: String(lyric).slice(0, 120),
-		}),
+		method: "DELETE",
+		headers: { "x-admin-token": token },
+		// body不要（管理者はdeleteKeyチェックしないため）
 		});
 		const data = await r.json();
-		if(!data.ok) throw new Error(data.error || "edit failed");
+		if(!data.ok) throw new Error(data.error || "admin delete failed");
 
-		msg.textContent = "編集しました！";
-		const fold = box.querySelector(".qbox-fold");
-		if (fold) fold.open = true;
+		msg.textContent = "管理者として削除しました。";
 		await loadAnswers(box);
 	}catch(err){
-		alert("編集に失敗：" + err.message);
+		alert("管理者削除に失敗：" + err.message);
 	}
 	return;
 	}
 
 
-		// ---- 管理者削除 ----
-if (adminDelBtn) {
-  const id = adminDelBtn.dataset.id;
-  const token = getAdminToken();
-  if (!token) return;
+			// ---- 削除 ----
+	const delBtn = e.target.closest(".qbox-del");
+	if (delBtn) {
+	const id = delBtn.dataset.id;
+	const token = getAdminToken();          // 管理者トークン（sessionStorage）
+	const myDeleteKey = getDeleteKey(id);   // 自分の投稿なら入ってる
+	const adminOn = !!token;
 
-  if (!confirm("【管理者】この投稿を削除しますか？")) return;
+	// 管理者でも本人でもない → 何もしない
+	if (!adminOn && !myDeleteKey) return;
 
-  try{
-    const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-      method: "DELETE",
-      headers: { "x-admin-token": token },
-      // body不要（管理者はdeleteKeyチェックしないため）
-    });
-    const data = await r.json();
-    if(!data.ok) throw new Error(data.error || "admin delete failed");
+	if (!confirm("この投稿を削除しますか？")) return;
 
-    msg.textContent = "管理者として削除しました。";
-    await loadAnswers(box);
-  }catch(err){
-    alert("管理者削除に失敗：" + err.message);
-  }
-  return;
-}
+	try {
+		const headers = { "Content-Type": "application/json" };
 
+		// 管理者ならヘッダーでトークン送る
+		if (adminOn) headers["x-admin-token"] = token;
 
-        // ---- 削除 ----
-const delBtn = e.target.closest(".qbox-del");
-if (delBtn) {
-  const id = delBtn.dataset.id;
-  const token = getAdminToken();          // 管理者トークン（sessionStorage）
-  const myDeleteKey = getDeleteKey(id);   // 自分の投稿なら入ってる
-  const adminOn = !!token;
-
-  // 管理者でも本人でもない → 何もしない
-  if (!adminOn && !myDeleteKey) return;
-
-  if (!confirm("この投稿を削除しますか？")) return;
-
-  try {
-    const headers = { "Content-Type": "application/json" };
-
-    // 管理者ならヘッダーでトークン送る
-    if (adminOn) headers["x-admin-token"] = token;
-
-    const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-      method: "DELETE",
-      headers,
-      body: adminOn
-        ? undefined // 管理者はdeleteKey不要
-        : JSON.stringify({ deleteKey: myDeleteKey }),
-    });
-
-    const data = await r.json();
-    if (!data.ok) throw new Error(data.error || "delete failed");
-
-    // 自分の投稿を消したなら localStorage の deleteKey も消す
-    if (myDeleteKey) removeDeleteKey(id);
-
-    msg.textContent = adminOn && !myDeleteKey ? "管理者として削除しました。" : "削除しました。";
-	const fold = box.querySelector(".qbox-fold");
-	if (fold) fold.open = true;
-    await loadAnswers(box);
-  } catch (err) {
-    alert("削除に失敗：" + err.message);
-  }
-  return;
-}
-
-      });
-
-      // 初期ロード
-      // 折りたたみ（開いた時だけロード）
-		const fold = box.querySelector(".qbox-fold");
-		let loadedOnce = false;
-
-		if (fold) {
-		fold.addEventListener("toggle", async () => {
-			if (fold.open && !loadedOnce) {
-			await loadAnswers(box);
-			loadedOnce = true;
-			}
+		const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+		method: "DELETE",
+		headers,
+		body: adminOn
+			? undefined // 管理者はdeleteKey不要
+			: JSON.stringify({ deleteKey: myDeleteKey }),
 		});
-		}
 
-    });
-  })();
+		const data = await r.json();
+		if (!data.ok) throw new Error(data.error || "delete failed");
+
+		// 自分の投稿を消したなら localStorage の deleteKey も消す
+		if (myDeleteKey) removeDeleteKey(id);
+
+		msg.textContent = adminOn && !myDeleteKey ? "管理者として削除しました。" : "削除しました。";
+		const fold = box.querySelector(".qbox-fold");
+		if (fold) fold.open = true;
+		await loadAnswers(box);
+	} catch (err) {
+		alert("削除に失敗：" + err.message);
+	}
+	return;
+	}
+
+		});
+
+		// 初期ロード
+		// 折りたたみ（開いた時だけロード）
+			const fold = box.querySelector(".qbox-fold");
+			let loadedOnce = false;
+
+			if (fold) {
+			fold.addEventListener("toggle", async () => {
+				if (fold.open && !loadedOnce) {
+				await loadAnswers(box);
+				loadedOnce = true;
+				}
+			});
+			}
+
+		});
+	})();
   </script>
 </section>
 
@@ -1038,7 +1036,7 @@ if (delBtn) {
 	
 
 
-	</main>
+</main>
 
 	<footer class="site-footer">
 		<p>© SPARK _SELF 実行委員会</p>
