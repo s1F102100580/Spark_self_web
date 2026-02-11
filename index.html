@@ -943,29 +943,7 @@ if (editBtn) {
 
 
 		// ---- 管理者削除 ----
-if (adminDelBtn) {
-  const id = adminDelBtn.dataset.id;
-  const token = getAdminToken();
-  if (!token) return;
 
-  if (!confirm("【管理者】この投稿を削除しますか？")) return;
-
-  try{
-    const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-      method: "DELETE",
-      headers: { "x-admin-token": token },
-      // body不要（管理者はdeleteKeyチェックしないため）
-    });
-    const data = await r.json();
-    if(!data.ok) throw new Error(data.error || "admin delete failed");
-
-    msg.textContent = "管理者として削除しました。";
-    await loadAnswers(box);
-  }catch(err){
-    alert("管理者削除に失敗：" + err.message);
-  }
-  return;
-}
 
 
         // ---- 削除 ----
