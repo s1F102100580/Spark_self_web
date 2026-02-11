@@ -670,48 +670,50 @@
 		</section>
 	</div>
 
+	<section class="section" aria-label="qbox">
+		<h2 class="section-title">QUESTION BOX</h2>
+
+		<div class="qbox" data-prompt="song_lyric">
+			<p class="qbox-prompt">Q. 好きな曲と、その曲の一番好きな歌詞（短め）を教えて！</p>
+
+			<form class="qbox-form">
+				<input type="hidden" name="promptId" value="song_lyric" />
+
+				<input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
+
+				<select name="artist" class="qbox-artist" required>
+					<option value="" disabled selected>好きなアーティストを選択（必須）</option>
+					<option value="Gum-9">Gum-9</option>
+					<option value="Fish and Lips">Fish and Lips</option>
+					<option value="らそんぶる">らそんぶる</option>
+				</select>
+
+				<input name="song" class="qbox-song" placeholder="好きな曲" maxlength="80" required />
+
+				<textarea name="lyric" class="qbox-answer"
+					placeholder="好きな歌詞（短い一節で！最大120文字）"
+					maxlength="120" required></textarea>
+
+				<button class="qbox-submit" type="submit">送信</button>
+				<p class="qbox-msg" aria-live="polite"></p>
+			</form>
+
+
+			<details class="qbox-fold">
+				<summary class="qbox-fold__sum">みんなの回答を見る</summary>
+
+				<div class="qbox-list-wrap">
+					<h3 class="qbox-subtitle">みんなの回答</h3>
+					<div class="qbox-list"></div>
+				</div>
+			</details>
+
+		</div>
+	</section>
 	</div>
 
 
-<section class="section" aria-label="qbox">
-  <h2 class="section-title">QUESTION BOX</h2>
 
-  <div class="qbox" data-prompt="song_lyric">
-    <p class="qbox-prompt">Q. 好きな曲と、その曲の一番好きな歌詞（短め）を教えて！</p>
-
-    <form class="qbox-form">
-		<input type="hidden" name="promptId" value="song_lyric" />
-
-		<input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
-
-		<select name="artist" class="qbox-artist" required>
-			<option value="" disabled selected>好きなアーティストを選択（必須）</option>
-			<option value="Gum-9">Gum-9</option>
-			<option value="Fish and Lips">Fish and Lips</option>
-			<option value="らそんぶる">らそんぶる</option>
-		</select>
-
-		<input name="song" class="qbox-song" placeholder="好きな曲" maxlength="80" required />
-
-		<textarea name="lyric" class="qbox-answer"
-			placeholder="好きな歌詞（短い一節で！最大120文字）"
-			maxlength="120" required></textarea>
-
-		<button class="qbox-submit" type="submit">送信</button>
-		<p class="qbox-msg" aria-live="polite"></p>
-	</form>
-
-
-    <details class="qbox-fold">
-		<summary class="qbox-fold__sum">みんなの回答を見る</summary>
-
-		<div class="qbox-list-wrap">
-			<h3 class="qbox-subtitle">みんなの回答</h3>
-			<div class="qbox-list"></div>
-		</div>
-	</details>
-
-  </div>
 
   <script>
 	const ADMIN_STORE = "qbox:adminToken";
