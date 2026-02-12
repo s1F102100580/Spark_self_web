@@ -703,6 +703,9 @@
 		<p class="qbox-msg" aria-live="polite"></p>
 	</form>
 
+	
+
+
 
     <details class="qbox-fold">
 		<summary class="qbox-fold__sum">みんなの回答を見る</summary>
@@ -714,6 +717,33 @@
 	</details>
 
   </div>
+  <br>
+
+  <div class="qbox" data-type="honne">
+  <p class="qbox-prompt">Q. 今、誰にも言えてない本音をひとこと。</p>
+
+  <form class="qbox-form">
+    <input type="hidden" name="promptId" value="honne_2026" />
+
+    <input name="name" class="qbox-name" placeholder="名前（任意）" maxlength="32" />
+
+    <textarea name="answer" class="qbox-answer"
+      placeholder="本音（最大120文字）"
+      maxlength="120" required></textarea>
+
+    <button class="qbox-submit" type="submit">送信</button>
+    <p class="qbox-msg" aria-live="polite"></p>
+  </form>
+
+  <details class="qbox-fold">
+    <summary class="qbox-fold__sum">みんなの本音を見る</summary>
+
+    <div class="qbox-list-wrap">
+      <h3 class="qbox-subtitle">みんなの本音</h3>
+      <div class="qbox-list"></div>
+    </div>
+  </details>
+</div>
 
   <script>
 	const ADMIN_STORE = "qbox:adminToken";
@@ -772,6 +802,15 @@ if (params.get("admin") === "1" || location.hash.includes("admin")) {
       }
     }
 
+	function getBoxType(box){
+	// HTML側で data-type="honne" を付けたのでそれを優先
+	if (box.dataset.type) return box.dataset.type;
+
+	// 保険：フォームに lyric があるなら歌詞箱
+	return box.querySelector('[name="lyric"]') ? "lyric" : "honne";
+	}
+
+
     async function loadAnswers(box){
       const form = box.querySelector(".qbox-form");
       const msg  = box.querySelector(".qbox-msg");
@@ -785,49 +824,83 @@ if (params.get("admin") === "1" || location.hash.includes("admin")) {
 
         const items = data.items || [];
 
-        list.innerHTML = items.map(it => {
-          const name  = it.name || "匿名";
-		  const artist = it.artist || "";
-          const song  = it.song || "";
-          const lyric = it.lyric || it.answer || "";
-          const time  = it.createdAt ? fmtTime(it.createdAt) : "";
-          const adminOn = !!getAdminToken();     // 管理者ログインしてる？
-		  const canEdit = !!getDeleteKey(it.id); // 自分の投稿？
-		  const canDelete = canEdit || adminOn;  // 自分 or 管理者なら削除できる
+		const type = getBoxType(box);
 
+list.innerHTML = items.map(it => {
+  const name  = it.name || "匿名";
+  const time  = it.createdAt ? fmtTime(it.createdAt) : "";
+  const adminOn = !!getAdminToken();
+  const canEdit = !!getDeleteKey(it.id);
+  const canDelete = canEdit || adminOn;
 
-          return `
-            <article class="qbox-item">
-              <div class="qbox-meta">
-                <span class="qbox-nameview">${esc(name)}</span>
-                <span class="qbox-time">${esc(time)}</span>
-              </div>
+  // ---- 本音箱 ----
+  if (type === "honne") {
+    const text = it.answer || it.text || ""; // 保険
+    return `
+      <article class="qbox-item">
+        <div class="qbox-meta">
+          <span class="qbox-nameview">${esc(name)}</span>
+          <span class="qbox-time">${esc(time)}</span>
+        </div>
 
-			  <p class="qbox-artistline">🎤 ${esc(artist)}</p>
-              <p class="qbox-songline">🎵 ${esc(song)}</p>
-              <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
+        <p class="qbox-text">${esc(text).replace(/\n/g,"<br>")}</p>
 
-              ${canDelete ? `
-  <div class="qbox-actions">
-    ${canEdit ? `
-      <button class="qbox-edit" type="button"
-        data-id="${esc(it.id)}"
-        data-name="${esc(name)}"
-		data-artist="${esc(artist)}"
-        data-song="${esc(song)}"
-        data-lyric="${esc(lyric)}"
-      >編集</button>
-    ` : ""}
+        ${canDelete ? `
+          <div class="qbox-actions">
+            ${canEdit ? `
+              <button class="qbox-edit" type="button"
+                data-id="${esc(it.id)}"
+                data-name="${esc(name)}"
+                data-answer="${esc(text)}"
+              >編集</button>
+            ` : ""}
 
-    <button class="qbox-del" type="button" data-id="${esc(it.id)}">
-      ${adminOn && !canEdit ? "管理者削除" : "削除"}
-    </button>
-  </div>
-` : ""}
+            <button class="qbox-del" type="button" data-id="${esc(it.id)}">
+              ${adminOn && !canEdit ? "管理者削除" : "削除"}
+            </button>
+          </div>
+        ` : ""}
+      </article>
+    `;
+  }
 
-            </article>
-          `;
-        }).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+  // ---- 歌詞箱 ----
+  const artist = it.artist || "";
+  const song  = it.song || "";
+  const lyric = it.lyric || it.answer || ""; // 保険
+
+  return `
+    <article class="qbox-item">
+      <div class="qbox-meta">
+        <span class="qbox-nameview">${esc(name)}</span>
+        <span class="qbox-time">${esc(time)}</span>
+      </div>
+
+      <p class="qbox-artistline">🎤 ${esc(artist)}</p>
+      <p class="qbox-songline">🎵 ${esc(song)}</p>
+      <p class="qbox-text">「${esc(lyric).replace(/\n/g,"<br>")}」</p>
+
+      ${canDelete ? `
+        <div class="qbox-actions">
+          ${canEdit ? `
+            <button class="qbox-edit" type="button"
+              data-id="${esc(it.id)}"
+              data-name="${esc(name)}"
+              data-artist="${esc(artist)}"
+              data-song="${esc(song)}"
+              data-lyric="${esc(lyric)}"
+            >編集</button>
+          ` : ""}
+
+          <button class="qbox-del" type="button" data-id="${esc(it.id)}">
+            ${adminOn && !canEdit ? "管理者削除" : "削除"}
+          </button>
+        </div>
+      ` : ""}
+    </article>
+  `;
+}).join("") || `<p class="qbox-empty">まだ投稿がありません</p>`;
+
 
         msg.textContent = "";
       } catch(e){
@@ -843,103 +916,115 @@ if (params.get("admin") === "1" || location.hash.includes("admin")) {
       const msg  = box.querySelector(".qbox-msg");
       const btn  = box.querySelector(".qbox-submit");
 
-      // 投稿
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        msg.textContent = "";
-        btn.disabled = true;
+     form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  msg.textContent = "";
+  btn.disabled = true;
 
-        const fd = new FormData(form);
-        const payload = {
-          promptId: fd.get("promptId"),
-          name: fd.get("name"),
-		  artist: fd.get("artist"),
-          song: fd.get("song"),
-          lyric: fd.get("lyric"),
-        };
+  const fd = new FormData(form);
+  const type = getBoxType(box);
 
-        try{
-          const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const data = await r.json();
-          if(!data.ok) throw new Error(data.error || "post failed");
+  const payload = {
+    promptId: fd.get("promptId"),
+    name: fd.get("name"),
+  };
 
-          // ★deleteKeyを保存（APIが item.deleteKey を返す前提）
-          if (data.item?.id && data.item?.deleteKey) {
-            storeDeleteKey(data.item.id, data.item.deleteKey);
-          }
+  if (type === "lyric") {
+    payload.artist = fd.get("artist");
+    payload.song   = fd.get("song");
+    payload.lyric  = fd.get("lyric");
+  } else {
+    payload.answer = fd.get("answer");
+  }
 
-          form.reset();
-          form.querySelector('[name="promptId"]').value = payload.promptId;
+  try {
+    const r = await fetch("/api/qbox?promptId=" + encodeURIComponent(payload.promptId), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-          msg.textContent = "送信しました！";
-		  const fold = box.querySelector(".qbox-fold");
-			if (fold) fold.open = true;
-          await loadAnswers(box);
-        }catch(err){
-          msg.textContent = "送信に失敗：" + err.message;
-        }finally{
-          btn.disabled = false;
-        }
-      });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || "post failed");
+
+    if (data.item?.id && data.item?.deleteKey) {
+      storeDeleteKey(data.item.id, data.item.deleteKey);
+    }
+
+    form.reset();
+    form.querySelector('[name="promptId"]').value = payload.promptId;
+
+    msg.textContent = "送信しました！";
+    const fold = box.querySelector(".qbox-fold");
+    if (fold) fold.open = true;
+    await loadAnswers(box);
+  } catch (err) {
+    msg.textContent = "送信に失敗：" + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 
 	  
 
-      // 編集・削除（イベント委任）
-      box.addEventListener("click", async (e) => {
-        const promptId = form.querySelector('[name="promptId"]').value;
+box.addEventListener("click", async (e) => {
+  const promptId = form.querySelector('[name="promptId"]').value;
 
-       // ---- 編集 ----
-const editBtn = e.target.closest(".qbox-edit");
-if (editBtn) {
-  const id = editBtn.dataset.id;
-  const deleteKey = getDeleteKey(id);
-  if (!deleteKey) return;
+  const editBtn = e.target.closest(".qbox-edit");
+  if (editBtn) {
+    const id = editBtn.dataset.id;
+    const deleteKey = getDeleteKey(id);
+    if (!deleteKey) return;
 
-  const curName   = editBtn.dataset.name || "";
-  const curArtist = editBtn.dataset.artist || ""; // ★追加
-  const curSong   = editBtn.dataset.song || "";
-  const curLyric  = editBtn.dataset.lyric || "";
+    const type = getBoxType(box);
+    const curName = editBtn.dataset.name || "";
+    const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
 
-  const name = (prompt("名前（任意）", curName) ?? curName).slice(0, 32);
+    let body = { deleteKey, name };
 
-  // ★ここに入れる（song の前でも後でもOK）
-  const artist = prompt("アーティスト（Gum-9 / Fish and Lips / らそんぶる）", curArtist);
-	if (artist === null) return;
+    if (type === "honne") {
+      const curAns = editBtn.dataset.answer || "";
+      const answer = prompt("本音（最大120文字）", curAns);
+      if (answer === null) return;
+      body.answer = String(answer).slice(0, 120);
+    } else {
+      const curArtist = editBtn.dataset.artist || "";
+      const curSong   = editBtn.dataset.song || "";
+      const curLyric  = editBtn.dataset.lyric || "";
 
-	const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
-	if (song === null) return;
+      const artist = prompt("アーティスト（Gum-9 / Fish and Lips / らそんぶる）", curArtist);
+      if (artist === null) return;
+      const song = prompt("好きな曲（曲名 / アーティスト）", curSong);
+      if (song === null) return;
+      const lyric = prompt("好きな歌詞（短め）", curLyric);
+      if (lyric === null) return;
 
-	const lyric = prompt("好きな歌詞（短め）", curLyric);
-	if (lyric === null) return;
+      body.artist = String(artist).trim();
+      body.song   = String(song).slice(0, 80);
+      body.lyric  = String(lyric).slice(0, 120);
+    }
 
-	try{
-		const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
-		method: "PUT",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({
-			deleteKey,
-			name,
-			artist: String(artist).trim(), // ★ここも追加
-			song: String(song).slice(0, 80),
-			lyric: String(lyric).slice(0, 120),
-		}),
-		});
-		const data = await r.json();
-		if(!data.ok) throw new Error(data.error || "edit failed");
+    try {
+      const r = await fetch(`/api/qbox?id=${encodeURIComponent(id)}&promptId=${encodeURIComponent(promptId)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || "edit failed");
 
-		msg.textContent = "編集しました！";
-		const fold = box.querySelector(".qbox-fold");
-		if (fold) fold.open = true;
-		await loadAnswers(box);
-	}catch(err){
-		alert("編集に失敗：" + err.message);
-	}
-	return;
-	}
+      msg.textContent = "編集しました！";
+      const fold = box.querySelector(".qbox-fold");
+      if (fold) fold.open = true;
+      await loadAnswers(box);
+    } catch (err) {
+      alert("編集に失敗：" + err.message);
+    }
+    return;
+  }
+
+
 
 
 		// ---- 管理者削除 ----
