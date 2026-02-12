@@ -105,34 +105,29 @@ export default async function handler(req, res) {
   }
 
   // POST: 投稿（deleteKey を1回だけ返す）
-  if (req.method === "POST") {
-    try {
-      const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+if (req.method === "POST") {
+  try {
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
-      const name = (body?.name || "").toString().trim().slice(0, 32);
-      const artist = (body?.artist || "").toString().trim();
-      const song = (body?.song || "").toString().trim().slice(0, 80);
-      const lyric = (body?.lyric || "").toString().trim().slice(0, 120);
+    // ★ 追加：promptIdの整合チェック（任意だけど強い）
+    const bodyPromptId = (body?.promptId || "").toString();
+    if (bodyPromptId && bodyPromptId !== promptId) {
+      return res.status(400).json({ ok: false, error: "promptId mismatch" });
+    }
 
-      const allowedArtists = new Set(["Gum-9", "Fish and Lips", "らそんぶる"]);
-      if (!allowedArtists.has(artist)) {
-        return res.status(400).json({ ok: false, error: "artist required" });
-      }
+    const name = (body?.name || "").toString().trim().slice(0, 32);
 
+    const deleteKey = crypto.randomBytes(16).toString("hex");
+    const deleteKeyHash = sha256(deleteKey);
 
-      if (!song) return res.status(400).json({ ok: false, error: "song required" });
-      if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
-
-      const deleteKey = crypto.randomBytes(16).toString("hex");
-      const deleteKeyHash = sha256(deleteKey);
-
+    // ★ 本音（answer）があるなら honne として保存
+    const answer = (body?.answer || "").toString().trim().slice(0, 120);
+    if (answer) {
       const item = {
         id: `q_${Date.now()}_${Math.random().toString(16).slice(2)}`,
         promptId,
         name: name || "匿名",
-        artist,
-        song,
-        lyric,
+        answer,
         createdAt: new Date().toISOString(),
         deleteKeyHash,
       };
@@ -142,10 +137,38 @@ export default async function handler(req, res) {
 
       const { deleteKeyHash: _, ...safeItem } = item;
       return res.status(201).json({ ok: true, item: { ...safeItem, deleteKey } });
-    } catch (e) {
-      return res.status(500).json({ ok: false, error: e.message });
     }
+
+    // ★ それ以外は歌詞箱
+    const artist = (body?.artist || "").toString().trim();
+    const song   = (body?.song || "").toString().trim().slice(0, 80);
+    const lyric  = (body?.lyric || "").toString().trim().slice(0, 120);
+
+    const allowedArtists = new Set(["Gum-9", "Fish and Lips", "らそんぶる"]);
+    if (!allowedArtists.has(artist)) return res.status(400).json({ ok: false, error: "artist required" });
+    if (!song) return res.status(400).json({ ok: false, error: "song required" });
+    if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
+
+    const item = {
+      id: `q_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+      promptId,
+      name: name || "匿名",
+      artist,
+      song,
+      lyric,
+      createdAt: new Date().toISOString(),
+      deleteKeyHash,
+    };
+
+    await upstash("lpush", listKey, JSON.stringify(item));
+    await upstash("ltrim", listKey, 0, 199);
+
+    const { deleteKeyHash: _, ...safeItem } = item;
+    return res.status(201).json({ ok: true, item: { ...safeItem, deleteKey } });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
   }
+}
 
   // DELETE: 自分の投稿を削除（deleteKey 必須）
 // + 管理者は deleteKey なしで削除OK
@@ -182,58 +205,67 @@ if (req.method === "DELETE") {
 }
 
   // PUT: 自分の投稿を編集（deleteKey 必須）
-  if (req.method === "PUT") {
-    try {
-      const id = (req.query?.id || "").toString();
-      if (!id) return res.status(400).json({ ok: false, error: "id required" });
+if (req.method === "PUT") {
+  try {
+    const id = (req.query?.id || "").toString();
+    if (!id) return res.status(400).json({ ok: false, error: "id required" });
 
-      const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-      const deleteKey = (body?.deleteKey || "").toString().trim();
-      if (!deleteKey) return res.status(400).json({ ok: false, error: "deleteKey required" });
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const deleteKey = (body?.deleteKey || "").toString().trim();
+    if (!deleteKey) return res.status(400).json({ ok: false, error: "deleteKey required" });
 
-      const name = (body?.name || "").toString().trim().slice(0, 32);
-      const artist = (body?.artist || "").toString().trim();
-      const song = (body?.song || "").toString().trim().slice(0, 80);
-      const lyric = (body?.lyric || "").toString().trim().slice(0, 120);
+    const hit = await findById(id);
+    if (!hit) return res.status(404).json({ ok: false, error: "not found" });
 
-      const allowedArtists = new Set(["Gum-9", "Fish and Lips", "らそんぶる"]);
-      if (!allowedArtists.has(artist)) {
-        return res.status(400).json({ ok: false, error: "artist required" });
-      }
+    if ((hit.item.promptId || "default") !== promptId) {
+      return res.status(400).json({ ok: false, error: "promptId mismatch" });
+    }
 
+    const hash = sha256(deleteKey);
+    if (hash !== hit.item.deleteKeyHash) {
+      return res.status(403).json({ ok: false, error: "invalid deleteKey" });
+    }
 
-      if (!song) return res.status(400).json({ ok: false, error: "song required" });
-      if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
+    const name = (body?.name || "").toString().trim().slice(0, 32);
 
-      const hit = await findById(id);
-      if (!hit) return res.status(404).json({ ok: false, error: "not found" });
-
-      if ((hit.item.promptId || "default") !== promptId) {
-        return res.status(400).json({ ok: false, error: "promptId mismatch" });
-      }
-
-      const hash = sha256(deleteKey);
-      if (hash !== hit.item.deleteKeyHash) {
-        return res.status(403).json({ ok: false, error: "invalid deleteKey" });
-      }
-
-      // 同じindexで差し替え（並び順キープ）
+    // ★ 本音編集（answerがあれば）
+    const answer = (body?.answer || "").toString().trim().slice(0, 120);
+    if (answer) {
       const updated = {
         ...hit.item,
         name: name || "匿名",
-        song,
-        lyric,
+        answer,
         updatedAt: new Date().toISOString(),
       };
-
       await upstash("lset", listKey, hit.index, JSON.stringify(updated));
-
       const { deleteKeyHash, ...safe } = updated;
       return res.status(200).json({ ok: true, item: safe });
-    } catch (e) {
-      return res.status(500).json({ ok: false, error: e.message });
     }
-  }
 
-  return res.status(405).json({ ok: false, error: "Method not allowed" });
+    // ★ 歌詞編集
+    const artist = (body?.artist || "").toString().trim();
+    const song   = (body?.song || "").toString().trim().slice(0, 80);
+    const lyric  = (body?.lyric || "").toString().trim().slice(0, 120);
+
+    const allowedArtists = new Set(["Gum-9", "Fish and Lips", "らそんぶる"]);
+    if (!allowedArtists.has(artist)) return res.status(400).json({ ok: false, error: "artist required" });
+    if (!song) return res.status(400).json({ ok: false, error: "song required" });
+    if (!lyric) return res.status(400).json({ ok: false, error: "lyric required" });
+
+    const updated = {
+      ...hit.item,
+      name: name || "匿名",
+      artist, // ★ これ、今のコードだと更新してないので入れた方が綺麗
+      song,
+      lyric,
+      updatedAt: new Date().toISOString(),
+    };
+
+    await upstash("lset", listKey, hit.index, JSON.stringify(updated));
+    const { deleteKeyHash, ...safe } = updated;
+    return res.status(200).json({ ok: true, item: safe });
+  } catch (e) {
+    return res.status(500).json({ ok: false, error: e.message });
+  }
+}
 }
