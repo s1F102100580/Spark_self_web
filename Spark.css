@@ -2887,3 +2887,137 @@ a.link-underline:hover{
   background: #0b0b10;
   color: #fff;
 }
+
+/* ===== QBOX (HONNE) ===== */
+#qbox .qbox{
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(6px);
+}
+
+#qbox .qbox-lead{
+  margin: 0 0 12px;
+  opacity: .9;
+  line-height: 1.8;
+}
+
+#qbox .qbox-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+@media (max-width: 768px){
+  #qbox .qbox-grid{ grid-template-columns: 1fr; }
+}
+
+#qbox .qbox-input,
+#qbox .qbox-textarea{
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.25);
+  color: #fff;
+  padding: 12px 12px;
+  outline: none;
+}
+
+#qbox .qbox-textarea{
+  min-height: 92px;
+  resize: vertical;
+  margin: 6px 0 10px;
+}
+
+#qbox .qbox-submit{
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  padding: 12px 14px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+#qbox .qbox-msg{
+  margin: 10px 0 0;
+  min-height: 1.2em;
+  opacity: .9;
+}
+
+#qbox .qbox-fold{
+  margin-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  padding-top: 10px;
+}
+
+#qbox .qbox-fold summary{
+  cursor: pointer;
+  user-select: none;
+  opacity: .95;
+}
+
+#qbox .qbox-item{
+  padding: 12px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+#qbox .qbox-meta{
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  opacity: .85;
+  font-size: 13px;
+}
+
+#qbox .qbox-text{
+  margin: 8px 0 0;
+  line-height: 1.85;
+}
+
+#qbox .qbox-empty{
+  opacity: .8;
+  padding: 12px 0 0;
+}
+
+
+/* 本音用：少し大きく、読みやすく */
+.qbox-item .qbox-text{
+  margin: 10px 0 0;
+  line-height: 1.85;
+  font-size: 16px;
+  letter-spacing: .02em;
+}
+
+/* さらに本音だけ強調したいなら（JS側で class 付けると良い） */
+.qbox-text--honne{
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* 投稿カード感（共通） */
+.qbox-item{
+  padding: 14px 14px 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(6px);
+  margin: 10px 0;
+}
+
+/* メタ情報を小さく・薄く */
+.qbox-meta{
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  opacity: .85;
+  font-size: 12px;
+}
+
+/* 改行をちゃんと活かす（escの replace <br> してるからOK） */
+.qbox-text br{ line-height: 1.9; }
