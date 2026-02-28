@@ -1,4 +1,4 @@
-:root{
+\:root{
   --bg:#0a0a0c;
   --text:#f4f4f5;
   --muted: rgba(244,244,245,.68);
@@ -3021,3 +3021,111 @@ a.link-underline:hover{
 
 /* 改行をちゃんと活かす（escの replace <br> してるからOK） */
 .qbox-text br{ line-height: 1.9; }
+
+
+/* ===== Hero Mid (3 photos + tagline) ===== */
+.hero-mid{
+  padding: 8px 0 6px;
+}
+
+.hero-mid__inner{
+  width: min(var(--max), calc(100% - (var(--padX) * 2)));
+  margin: 0 auto;
+  text-align: center;
+  margin-top: -150px;
+
+}
+
+.hero-mid{
+  font-family:
+    "Hiragino Mincho ProN",
+    "Hiragino Mincho Pro",
+    "Yu Mincho",
+    "游明朝",
+    "Noto Serif JP",    
+    "MS Mincho",
+    serif;
+}
+.hero-mid__grid{
+  margin: 12px auto 10px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 920px;
+}
+
+.hero-mid__card{
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(10,10,12,.55);
+  backdrop-filter: blur(10px);
+  aspect-ratio: 4 / 3;        /* 写真の見え方を安定させる */
+  position: relative;
+}
+
+/* ぱっと見で「写真枠」感を出す（仮素材でも映える） */
+.hero-mid__card::after{
+  content:"";
+  position:absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+  pointer-events:none;
+}
+
+.hero-mid__card img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* SEE YOU NEXT TIME */
+.hero-mid__tagline{
+  margin: 6px 0 0;
+  font-weight: 950;
+  letter-spacing: .22em;
+  font-size: 48px;
+  opacity: .92;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero-mid__tagline2{
+  margin: 6px 0 0;
+  font-weight: 950;
+  letter-spacing: .22em;
+  font-size: 32px;
+  opacity: .92;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 820px){
+  .hero-mid__grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px){
+  .hero-mid__grid{
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .hero-mid__card{
+    aspect-ratio: 16 / 9; /* スマホは横長の方が“それっぽい” */
+    margin-top: auto;
+  }
+  .hero-mid__tagline{
+    font-size: 24px;
+    letter-spacing: .18em;
+    margin-bottom: 32px;
+  }
+  .hero-mid__tagline2{
+    font-size: 24px;
+    letter-spacing: .18em;
+    margin-bottom: 32px;
+  }
+}
